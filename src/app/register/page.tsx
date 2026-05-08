@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Map, Lock, Mail, User } from "lucide-react";
+import { Navigation, Lock, Mail, User } from "lucide-react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { registerUser } from "@/app/actions/auth";
@@ -49,8 +49,8 @@ export default function RegisterPage() {
         <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#188038] opacity-20 rounded-full blur-[50px] pointer-events-none" />
         
         <div className="flex flex-col items-center mb-8 relative z-10">
-          <div className="w-16 h-16 rounded-2xl bg-[#1A73E8]/10 text-[#1A73E8] flex items-center justify-center mb-4 border border-[#1A73E8]/20 shadow-[0_2px_8px_rgba(26,115,232,0.1)]">
-            <Map className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-full bg-[#0d1117] text-[#00e5a0] flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(0,229,160,0.2)] border border-[#00e5a0]/50">
+            <Navigation className="w-8 h-8 ml-[-2px] mt-[-2px] rotate-45" strokeWidth={2.5} />
           </div>
           <h1 className="text-2xl font-bold text-[#202124] font-['Syne']">Create Account</h1>
           <p className="text-[#5F6368] text-sm mt-1">Join the SmartNav community</p>
