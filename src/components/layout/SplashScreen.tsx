@@ -45,10 +45,14 @@ export default function SplashScreen() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex items-center gap-4 mb-4"
+            className="flex items-center gap-6 mb-4"
           >
-            <div className="w-16 h-16 rounded-full bg-[#0d1117] text-[#00e5a0] flex items-center justify-center shadow-[0_0_40px_rgba(0,229,160,0.4)] border border-[#00e5a0]/50">
-              <Navigation className="w-8 h-8 ml-[-2px] mt-[-2px] rotate-45" strokeWidth={2.5} />
+            <div className="relative w-20 h-20 flex items-center justify-center">
+              <div className="absolute inset-0 border-4 border-[#00e5a0]/20 rounded-full animate-ping" style={{ animationDuration: '2s' }}></div>
+              <div className="absolute inset-2 border-4 border-[#00e5a0]/40 rounded-full animate-pulse" style={{ animationDuration: '3s' }}></div>
+              <div className="w-16 h-16 rounded-full bg-[#0d1117] text-[#00e5a0] flex items-center justify-center shadow-[0_0_40px_rgba(0,229,160,0.4)] border border-[#00e5a0]/50 z-10">
+                <Navigation className="w-8 h-8 ml-[-2px] mt-[-2px] rotate-45 animate-pulse" strokeWidth={2.5} />
+              </div>
             </div>
             <div className="text-left">
               <h1 className="font-['Syne'] font-bold text-4xl text-[#202124] tracking-tight">
