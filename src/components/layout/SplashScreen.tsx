@@ -26,7 +26,7 @@ export default function SplashScreen() {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0d1117]"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/60"
         >
           {/* Logo Animation */}
           <motion.div
@@ -35,14 +35,14 @@ export default function SplashScreen() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex items-center gap-4 mb-4"
           >
-            <div className="w-16 h-16 rounded-2xl bg-[#00e5a0] text-black flex items-center justify-center shadow-[0_0_40px_rgba(0,229,160,0.4)]">
+            <div className="w-16 h-16 rounded-2xl bg-[#1A73E8] text-[#202124] flex items-center justify-center shadow-[0_0_40px_rgba(0,229,160,0.4)]">
               <Map className="w-10 h-10" />
             </div>
             <div className="text-left">
-              <h1 className="font-['Syne'] font-bold text-4xl text-white tracking-tight">
+              <h1 className="font-['Syne'] font-bold text-4xl text-[#202124] tracking-tight">
                 SmartNav
               </h1>
-              <p className="text-[#00e5a0] text-sm tracking-widest uppercase font-medium">
+              <p className="text-[#1A73E8] text-sm tracking-widest uppercase font-medium">
                 Dhaka
               </p>
             </div>
@@ -53,9 +53,9 @@ export default function SplashScreen() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-[#8b949e] font-medium tracking-wide flex items-center gap-2"
+            className="text-[#5F6368] font-medium tracking-wide flex items-center gap-2"
           >
-            Powered by <span className="text-white font-bold">HASHARC Studio</span>
+            Powered by <span className="text-[#202124] font-bold">HASHARC Studio</span>
           </motion.div>
           
           {/* Progress Bar */}
@@ -66,7 +66,7 @@ export default function SplashScreen() {
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
               transition={{ duration: 2.5, ease: "linear" }}
-              className="h-full bg-gradient-to-r from-[#00e5a0] to-[#38bdf8]"
+              className="h-full bg-gradient-to-r from-[#1A73E8] to-[#188038]"
             />
           </motion.div>
         </motion.div>

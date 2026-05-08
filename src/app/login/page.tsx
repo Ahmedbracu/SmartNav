@@ -43,51 +43,51 @@ export default function LoginPage() {
     <div className="flex min-h-[80vh] items-center justify-center animate-in fade-in zoom-in duration-500">
       <div className="glass-card w-full max-w-md p-8 relative overflow-hidden">
         {/* Glow effect */}
-        <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#00e5a0] opacity-20 rounded-full blur-[50px] pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#38bdf8] opacity-20 rounded-full blur-[50px] pointer-events-none" />
+        <div className="absolute -top-20 -right-20 w-40 h-40 bg-[#1A73E8] opacity-20 rounded-full blur-[50px] pointer-events-none" />
+        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#188038] opacity-20 rounded-full blur-[50px] pointer-events-none" />
         
         <div className="flex flex-col items-center mb-8 relative z-10">
-          <div className="w-16 h-16 rounded-2xl bg-[#00e5a0]/10 text-[#00e5a0] flex items-center justify-center mb-4 border border-[#00e5a0]/20 shadow-[0_0_20px_rgba(0,229,160,0.1)]">
+          <div className="w-16 h-16 rounded-2xl bg-[#1A73E8]/10 text-[#1A73E8] flex items-center justify-center mb-4 border border-[#1A73E8]/20 shadow-[0_0_20px_rgba(0,229,160,0.1)]">
             <Map className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-white font-['Syne']">Welcome Back</h1>
-          <p className="text-[#8b949e] text-sm mt-1">Log in to navigate the chaos of Dhaka</p>
+          <h1 className="text-2xl font-bold text-[#202124] font-['Syne']">Welcome Back</h1>
+          <p className="text-[#5F6368] text-sm mt-1">Log in to navigate the chaos of Dhaka</p>
         </div>
 
         {error && (
-          <div className="bg-[#ff6b8a]/10 border border-[#ff6b8a]/20 text-[#ff6b8a] p-3 rounded-lg text-sm mb-6 flex items-center justify-center relative z-10">
+          <div className="bg-[#D93025]/10 border border-[#D93025]/20 text-[#D93025] p-3 rounded-lg text-sm mb-6 flex items-center justify-center relative z-10">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-[#8b949e] uppercase tracking-wider ml-1">Email Address</label>
+            <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8b949e]" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5F6368]" />
               <input 
                 type="email" 
                 name="email"
                 placeholder="you@example.com" 
                 required
-                className="w-full bg-[#0d1117] border border-[#30363d]/60 rounded-lg py-3 pl-10 pr-4 text-white placeholder-[#8b949e]/50 focus:outline-none focus:border-[#00e5a0] focus:ring-1 focus:ring-[#00e5a0] transition-all"
+                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#00e5a0] transition-all"
               />
             </div>
           </div>
           
           <div className="space-y-1">
             <div className="flex justify-between items-center ml-1">
-              <label className="text-xs font-semibold text-[#8b949e] uppercase tracking-wider">Password</label>
-              <a href="#" className="text-xs text-[#38bdf8] hover:text-white transition-colors">Forgot?</a>
+              <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider">Password</label>
+              <a href="#" className="text-xs text-[#188038] hover:text-[#202124] transition-colors">Forgot?</a>
             </div>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8b949e]" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5F6368]" />
               <input 
                 type="password" 
                 name="password"
                 placeholder="••••••••" 
                 required
-                className="w-full bg-[#0d1117] border border-[#30363d]/60 rounded-lg py-3 pl-10 pr-4 text-white placeholder-[#8b949e]/50 focus:outline-none focus:border-[#00e5a0] focus:ring-1 focus:ring-[#00e5a0] transition-all"
+                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#00e5a0] transition-all"
               />
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
           <button 
             type="submit" 
             disabled={isPending}
-            className="w-full bg-gradient-to-r from-[#00e5a0] to-[#00c489] text-black font-bold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(0,229,160,0.4)] transition-all flex items-center justify-center mt-2 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-[#1A73E8] to-[#00c489] text-[#202124] font-bold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(0,229,160,0.4)] transition-all flex items-center justify-center mt-2 disabled:opacity-50"
           >
             {isPending ? (
               <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
@@ -107,14 +107,14 @@ export default function LoginPage() {
 
         <div className="relative z-10 mt-6">
           <div className="relative flex items-center py-2">
-            <div className="flex-grow border-t border-[#30363d]/60"></div>
-            <span className="flex-shrink-0 mx-4 text-[#8b949e] text-xs uppercase tracking-wider font-semibold">Or continue with</span>
-            <div className="flex-grow border-t border-[#30363d]/60"></div>
+            <div className="flex-grow border-t border-[#DADCE0]/60"></div>
+            <span className="flex-shrink-0 mx-4 text-[#5F6368] text-xs uppercase tracking-wider font-semibold">Or continue with</span>
+            <div className="flex-grow border-t border-[#DADCE0]/60"></div>
           </div>
           
           <button 
             onClick={handleGoogleSignIn}
-            className="w-full mt-4 bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-2"
+            className="w-full mt-4 bg-white text-[#202124] font-bold py-3 rounded-lg hover:bg-gray-100 transition-all flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -126,8 +126,8 @@ export default function LoginPage() {
           </button>
         </div>
         
-        <div className="mt-6 text-center text-sm text-[#8b949e] relative z-10">
-          Don&apos;t have an account? <Link href="/register" className="text-[#00e5a0] hover:text-white transition-colors font-medium">Create one</Link>
+        <div className="mt-6 text-center text-sm text-[#5F6368] relative z-10">
+          Don&apos;t have an account? <Link href="/register" className="text-[#1A73E8] hover:text-[#202124] transition-colors font-medium">Create one</Link>
         </div>
       </div>
     </div>

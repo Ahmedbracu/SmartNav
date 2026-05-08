@@ -34,59 +34,59 @@ export default function AdminTransportClient({ transports }: any) {
   return (
     <div className="animate-in fade-in duration-500 max-w-4xl mx-auto pb-10">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2 font-['Syne'] flex items-center gap-3">
-          <Bus className="w-8 h-8 text-[#38bdf8]" />
+        <h1 className="text-3xl font-bold text-[#202124] mb-2 font-['Syne'] flex items-center gap-3">
+          <Bus className="w-8 h-8 text-[#188038]" />
           Manage Transport Fares
         </h1>
-        <p className="text-[#8b949e]">Update base fares and cost-per-km for Buses, Metros, and more.</p>
+        <p className="text-[#5F6368]">Update base fares and cost-per-km for Buses, Metros, and more.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
         <div className="glass-card">
-          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-            <PlusCircle className="w-5 h-5 text-[#00e5a0]" /> Add Transport Mode
+          <h2 className="text-lg font-bold text-[#202124] mb-4 flex items-center gap-2">
+            <PlusCircle className="w-5 h-5 text-[#1A73E8]" /> Add Transport Mode
           </h2>
           
           {msg && (
-            <div className={`p-3 rounded-lg text-xs mb-4 flex items-center gap-2 ${isError ? "bg-[#ff6b8a]/10 text-[#ff6b8a]" : "bg-[#00e5a0]/10 text-[#00e5a0]"}`}>
+            <div className={`p-3 rounded-lg text-xs mb-4 flex items-center gap-2 ${isError ? "bg-[#D93025]/10 text-[#D93025]" : "bg-[#1A73E8]/10 text-[#1A73E8]"}`}>
               {isError ? <AlertCircle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />} {msg}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-xs text-[#8b949e] uppercase mb-1 block">Transport Type Name</label>
-              <input type="text" name="transport_type" required placeholder="e.g. Electric Bus" className="w-full bg-[#0d1117] border border-[#30363d] rounded-lg p-3 text-white text-sm" />
+              <label className="text-xs text-[#5F6368] uppercase mb-1 block">Transport Type Name</label>
+              <input type="text" name="transport_type" required placeholder="e.g. Electric Bus" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-3 text-[#202124] text-sm" />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-[#8b949e] uppercase mb-1 block">Avg Speed (km/h)</label>
-                <input type="number" step="0.1" name="average_speed" required placeholder="30" className="w-full bg-[#0d1117] border border-[#30363d] rounded-lg p-3 text-white text-sm" />
+                <label className="text-xs text-[#5F6368] uppercase mb-1 block">Avg Speed (km/h)</label>
+                <input type="number" step="0.1" name="average_speed" required placeholder="30" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-3 text-[#202124] text-sm" />
               </div>
               <div>
-                <label className="text-xs text-[#8b949e] uppercase mb-1 block">Base Fare (BDT)</label>
-                <input type="number" step="0.01" name="base_fare" required placeholder="25" className="w-full bg-[#0d1117] border border-[#30363d] rounded-lg p-3 text-white text-sm" />
+                <label className="text-xs text-[#5F6368] uppercase mb-1 block">Base Fare (BDT)</label>
+                <input type="number" step="0.01" name="base_fare" required placeholder="25" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-3 text-[#202124] text-sm" />
               </div>
             </div>
-            <button type="submit" disabled={isPending} className="w-full bg-[#38bdf8] text-black font-bold py-3 rounded-lg hover:bg-[#0284c7] transition-colors mt-2 text-sm disabled:opacity-50">
+            <button type="submit" disabled={isPending} className="w-full bg-[#188038] text-[#202124] font-bold py-3 rounded-lg hover:bg-[#0284c7] transition-colors mt-2 text-sm disabled:opacity-50">
               {isPending ? "Adding..." : "Add Transport Mode"}
             </button>
           </form>
         </div>
 
         <div className="glass-card">
-          <h2 className="text-sm font-bold text-[#8b949e] uppercase tracking-wider mb-4">Current Transport Modes</h2>
+          <h2 className="text-sm font-bold text-[#5F6368] uppercase tracking-wider mb-4">Current Transport Modes</h2>
           <div className="space-y-3">
             {transports.length === 0 ? (
-              <div className="text-sm text-[#8b949e] italic text-center p-4">No transport modes available.</div>
+              <div className="text-sm text-[#5F6368] italic text-center p-4">No transport modes available.</div>
             ) : (
               transports.map((t: any) => (
-                <div key={t._id} className="flex justify-between items-center p-3 bg-[#0d1117] rounded-lg border border-[#30363d]">
+                <div key={t._id} className="flex justify-between items-center p-3 bg-white/60 rounded-lg border border-[#DADCE0]">
                   <div>
-                    <div className="font-bold text-white text-sm">{t.type}</div>
-                    <div className="text-xs text-[#8b949e] mt-0.5">৳{t.base_fare} · {t.average_speed} km/h</div>
+                    <div className="font-bold text-[#202124] text-sm">{t.type}</div>
+                    <div className="text-xs text-[#5F6368] mt-0.5">৳{t.base_fare} · {t.average_speed} km/h</div>
                   </div>
-                  <button onClick={() => handleDelete(t._id)} className="w-8 h-8 rounded-lg bg-[#ff6b8a]/10 text-[#ff6b8a] flex items-center justify-center hover:bg-[#ff6b8a] hover:text-black transition-colors">
+                  <button onClick={() => handleDelete(t._id)} className="w-8 h-8 rounded-lg bg-[#D93025]/10 text-[#D93025] flex items-center justify-center hover:bg-[#D93025] hover:text-[#202124] transition-colors">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

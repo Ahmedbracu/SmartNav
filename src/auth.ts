@@ -34,9 +34,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isPasswordValid = await bcrypt.compare(credentials.password as string, user.password_hash);
         
         if (!isPasswordValid) {
+          const passStr = credentials.password as string;
           // Migration fallback: if raw match, update to bcrypt
-          if (credentials.password === user.password_hash) {
-            const hashed = await bcrypt.hash(credentials.password, 10);
+          if (passStr === user.password_hash) {
+            const hashed = await bcrypt.hash(passStr, 10);
             await User.findByIdAndUpdate(user._id, { password_hash: hashed });
           } else {
             throw new Error("Invalid credentials");
