@@ -80,3 +80,35 @@ export async function deleteSegment(routeId: string, segmentId: string) {
   });
   revalidatePath("/admin/routes");
 }
+
+export async function addTrafficRecord(formData: FormData) {
+  const Traffic = (await import("@/models/Traffic")).default;
+  await connectToDatabase();
+
+  const location = formData.get("location_id") as string;
+  const congestion_level = formData.get("congestion_level") as string;
+  const avg_speed = Number(formData.get("avg_speed"));
+  const time_slot = formData.get("time_slot") as string;
+
+  try {
+    await Traffic.create({
+      location,
+      congestion_level,
+      avg_speed,
+      date: new Date(),
+      time_slot,
+    });
+    revalidatePath("/admin/traffic");
+    return { success: "Traffic record added." };
+  } catch (e: any) {
+    return { error: e.message };
+  }
+}
+
+export async function deleteTrafficRecord(recordId: string) {
+  const Traffic = (await import("@/models/Traffic")).default;
+  await connectToDatabase();
+  await Traffic.findByIdAndDelete(recordId);
+  revalidatePath("/admin/traffic");
+}
+
