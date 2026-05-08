@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { Compass, Map, Activity, MapPin, Search, Star, Clock, AlertTriangle, Users, LogIn, LogOut, ShieldAlert, Settings } from "lucide-react";
+import { Compass, Map, Activity, MapPin, Search, Star, Clock, AlertTriangle, Flag, LogIn, LogOut, ShieldAlert, Settings } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -21,7 +21,7 @@ export default function Sidebar() {
   const userLinks = [
     { name: "Trip History", href: "/trip-history", icon: Clock },
     { name: "Ratings", href: "/ratings", icon: Star },
-    { name: "Report Incident", href: "/report", icon: MapPin },
+    { name: "Report Incident", href: "/report", icon: Flag },
     { name: "My Preferences", href: "/preferences", icon: Settings },
   ];
 
