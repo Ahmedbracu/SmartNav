@@ -68,7 +68,7 @@ export default function AdminTransportClient({ transports }: any) {
                 <input type="number" step="0.01" name="base_fare" required placeholder="25" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-3 text-[#202124] text-sm" />
               </div>
             </div>
-            <button type="submit" disabled={isPending} className="w-full bg-[#188038] text-[#202124] font-bold py-3 rounded-lg hover:bg-[#0284c7] transition-colors mt-2 text-sm disabled:opacity-50">
+            <button type="submit" disabled={isPending} className="w-full bg-[#188038] text-white font-bold py-3 rounded-lg hover:bg-[#0284c7] transition-colors mt-2 text-sm disabled:opacity-50">
               {isPending ? "Adding..." : "Add Transport Mode"}
             </button>
           </form>

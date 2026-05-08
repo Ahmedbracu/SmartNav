@@ -56,9 +56,9 @@ export default function AdminIncidentClient({ incidents }: any) {
                       <div className="font-bold text-[#202124] mb-1 flex items-center gap-2">
                         {i.type}
                         <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded ${
-                          i.severity === 'High' ? 'bg-[#D93025] text-[#202124]' : 
-                          i.severity === 'Medium' ? 'bg-[#F4B400] text-[#202124]' : 
-                          'bg-[#1A73E8] text-[#202124]'
+                          i.severity === 'High' ? 'bg-[#D93025] text-white' : 
+                          i.severity === 'Medium' ? 'bg-[#F4B400] text-white' : 
+                          'bg-[#1A73E8] text-white'
                         }`}>
                           {i.severity}
                         </span>

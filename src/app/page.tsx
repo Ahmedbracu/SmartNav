@@ -74,13 +74,13 @@ export default async function Dashboard() {
 
       {/* QUICK ACTIONS */}
       <div className="flex flex-wrap gap-4">
-        <Link href="/route-finder" className="flex items-center gap-2 bg-[#1A73E8] text-[#202124] px-6 py-3 rounded-lg font-bold hover:bg-[#00c489] transition-colors shadow-[0_0_20px_rgba(0,229,160,0.3)]">
+        <Link href="/route-finder" className="flex items-center gap-2 bg-[#1A73E8] text-white px-6 py-3 rounded-lg font-bold hover:bg-[#1557B0] transition-colors shadow-[0_2px_8px_rgba(26,115,232,0.3)]">
           <Route className="w-5 h-5" /> Find a Route
         </Link>
-        <Link href="/report" className="flex items-center gap-2 bg-[#F8F9FA] text-[#202124] border border-[#DADCE0]/60 px-6 py-3 rounded-lg font-medium hover:bg-[#21262d] transition-colors">
+        <Link href="/report" className="flex items-center gap-2 bg-[#F8F9FA] text-[#202124] border border-[#DADCE0]/60 px-6 py-3 rounded-lg font-medium hover:bg-[#E8EAED] transition-colors">
           <Flag className="w-5 h-5 text-[#D93025]" /> Report Incident
         </Link>
-        <Link href="/chaos-map" className="flex items-center gap-2 bg-[#F8F9FA] text-[#202124] border border-[#DADCE0]/60 px-6 py-3 rounded-lg font-medium hover:bg-[#21262d] transition-colors">
+        <Link href="/chaos-map" className="flex items-center gap-2 bg-[#F8F9FA] text-[#202124] border border-[#DADCE0]/60 px-6 py-3 rounded-lg font-medium hover:bg-[#E8EAED] transition-colors">
           <Map className="w-5 h-5 text-[#188038]" /> View Chaos Map
         </Link>
       </div>
@@ -126,9 +126,9 @@ export default async function Dashboard() {
                     </div>
                     <div className="text-xs text-[#5F6368] mb-2">{new Date(incident.reported_at).toLocaleString()}</div>
                     <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded ${
-                      incident.severity === 'High' ? 'bg-[#D93025] text-[#202124]' : 
-                      incident.severity === 'Medium' ? 'bg-[#F4B400] text-[#202124]' : 
-                      'bg-[#188038] text-[#202124]'
+                      incident.severity === 'High' ? 'bg-[#D93025] text-white' : 
+                      incident.severity === 'Medium' ? 'bg-[#F4B400] text-white' : 
+                      'bg-[#188038] text-white'
                     }`}>
                       {incident.severity}
                     </span>

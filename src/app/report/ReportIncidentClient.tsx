@@ -104,7 +104,7 @@ export default function ReportIncidentClient({ userId, locations, recentReports 
           </div>
 
           <button type="submit" disabled={isPending}
-            className="w-full bg-gradient-to-r from-[#D93025] to-[#d6405f] text-[#202124] font-bold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(255,107,138,0.4)] transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-50">
+            className="w-full bg-gradient-to-r from-[#D93025] to-[#C5221F] text-white font-bold py-3 rounded-lg hover:shadow-[0_4px_12px_rgba(217,48,37,0.3)] transition-all flex items-center justify-center gap-2 mt-4 disabled:opacity-50">
             {isPending ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <><Flag className="w-5 h-5" /> Submit Report</>}
           </button>
         </form>
@@ -133,9 +133,9 @@ export default function ReportIncidentClient({ userId, locations, recentReports 
                     <div className="flex items-center gap-2">
                       {r.type}
                       <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded ${
-                        r.severity === 'High' ? 'bg-[#D93025] text-[#202124]' : 
-                        r.severity === 'Medium' ? 'bg-[#F4B400] text-[#202124]' : 
-                        'bg-[#1A73E8] text-[#202124]'
+                        r.severity === 'High' ? 'bg-[#D93025] text-white' : 
+                        r.severity === 'Medium' ? 'bg-[#F4B400] text-white' : 
+                        'bg-[#1A73E8] text-white'
                       }`}>
                         {r.severity}
                       </span>

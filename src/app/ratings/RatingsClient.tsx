@@ -169,7 +169,7 @@ export default function RatingsClient({ isLoggedIn, userId, transports, routes, 
                     <label className="text-xs text-[#5F6368] uppercase mb-1 block">Comment (Optional)</label>
                     <textarea name="comment" rows={3} className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm resize-none" placeholder="Share your experience..." />
                   </div>
-                  <button type="submit" disabled={isPending} className="w-full bg-[#F4B400] text-[#202124] font-bold py-2 rounded-lg hover:bg-[#d97706] transition-colors text-sm disabled:opacity-50">
+                  <button type="submit" disabled={isPending} className="w-full bg-[#F4B400] text-white font-bold py-2 rounded-lg hover:bg-[#d97706] transition-colors text-sm disabled:opacity-50">
                     {isPending ? "Submitting..." : "Submit Review"}
                   </button>
                 </form>

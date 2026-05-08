@@ -89,8 +89,8 @@ export default function PreferencesPage() {
           </div>
 
           <button type="submit" disabled={isPending}
-            className="w-full bg-[#1A73E8] text-[#202124] font-bold py-3 rounded-lg hover:bg-[#00c489] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
-            {isPending ? <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" /> : <><Save className="w-5 h-5" /> Save Preferences</>}
+            className="w-full bg-[#1A73E8] text-white font-bold py-3 rounded-lg hover:bg-[#1557B0] transition-colors flex items-center justify-center gap-2 disabled:opacity-50">
+            {isPending ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <><Save className="w-5 h-5" /> Save Preferences</>}
           </button>
         </form>
       </div>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { Compass, Map, Activity, MapPin, Search, Star, History, AlertTriangle, Flag, LogIn, LogOut, ShieldAlert, SlidersHorizontal } from "lucide-react";
+import { Compass, Map, Activity, MapPin, Search, Star, History, AlertTriangle, Flag, LogIn, LogOut, ShieldAlert, SlidersHorizontal, Navigation } from "lucide-react";
 
 export default function Sidebar() {
   const pathname = usePathname();
@@ -37,7 +37,7 @@ export default function Sidebar() {
           key={link.name}
           href={link.href}
           className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors mb-1
-            ${isActive ? "bg-[#1A73E8]/10 text-[#1A73E8]" : "text-[#5F6368] hover:bg-white/5 hover:text-[#202124]"}`}
+            ${isActive ? "bg-[#1A73E8]/10 text-[#1A73E8]" : "text-[#5F6368] hover:bg-[#E8EAED]/60 hover:text-[#202124]"}`}
         >
           <link.icon className={`w-5 h-5 ${isActive ? "text-[#1A73E8]" : "text-[#5F6368]"}`} />
           {link.name}
@@ -50,8 +50,8 @@ export default function Sidebar() {
     <aside className="w-64 h-screen fixed left-0 top-0 border-r border-white/80 bg-white/60 backdrop-blur-2xl shadow-[4px_0_24px_rgba(32,33,36,0.04)] flex flex-col z-40">
       {/* Brand */}
       <div className="h-16 flex items-center px-6 border-b border-[#DADCE0]/60">
-        <div className="w-8 h-8 rounded-lg bg-[#1A73E8] text-[#202124] flex items-center justify-center font-bold mr-3">
-          <Map className="w-5 h-5" />
+        <div className="w-8 h-8 rounded-full bg-[#0d1117] text-[#00e5a0] flex items-center justify-center font-bold mr-3 shadow-[0_0_15px_rgba(0,229,160,0.2)] border border-[#00e5a0]/50">
+          <Navigation className="w-4 h-4 ml-[-2px] mt-[-2px] rotate-45" strokeWidth={2.5} />
         </div>
         <div>
           <div className="font-['Syne'] font-bold text-lg leading-tight text-[#202124]">SmartNav</div>
@@ -107,7 +107,7 @@ export default function Sidebar() {
         ) : (
           <Link
             href="/login"
-            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-[#5F6368] hover:bg-white/5 hover:text-[#202124] transition-colors"
+            className="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-[#5F6368] hover:bg-[#E8EAED]/60 hover:text-[#202124] transition-colors"
           >
             <LogIn className="w-5 h-5" />
             Log in

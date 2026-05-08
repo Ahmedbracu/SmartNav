@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Map } from "lucide-react";
+import { Navigation } from "lucide-react";
 
 export default function SplashScreen() {
   const [show, setShow] = useState(true);
@@ -35,8 +35,8 @@ export default function SplashScreen() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex items-center gap-4 mb-4"
           >
-            <div className="w-16 h-16 rounded-2xl bg-[#1A73E8] text-[#202124] flex items-center justify-center shadow-[0_0_40px_rgba(0,229,160,0.4)]">
-              <Map className="w-10 h-10" />
+            <div className="w-16 h-16 rounded-full bg-[#0d1117] text-[#00e5a0] flex items-center justify-center shadow-[0_0_40px_rgba(0,229,160,0.4)] border border-[#00e5a0]/50">
+              <Navigation className="w-8 h-8 ml-[-2px] mt-[-2px] rotate-45" strokeWidth={2.5} />
             </div>
             <div className="text-left">
               <h1 className="font-['Syne'] font-bold text-4xl text-[#202124] tracking-tight">

@@ -124,7 +124,7 @@ export default function TrafficClient({ isLoggedIn, userId, locations, recentTra
                   <label className="text-xs text-[#5F6368] uppercase mb-1 block">Description</label>
                   <input type="text" name="description" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm" placeholder="Optional notes" />
                 </div>
-                <button type="submit" disabled={isPending} className="w-full bg-[#188038] text-[#202124] font-bold py-2 rounded-lg hover:bg-[#0284c7] transition-colors mt-2 text-sm disabled:opacity-50">
+                <button type="submit" disabled={isPending} className="w-full bg-[#188038] text-white font-bold py-2 rounded-lg hover:bg-[#0284c7] transition-colors mt-2 text-sm disabled:opacity-50">
                   {isPending ? "Submitting..." : "Submit Report"}
                 </button>
               </form>

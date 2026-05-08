@@ -63,7 +63,7 @@ export default function AdminLocationClient({ locations }: any) {
               <input type="text" name="area_zone" required placeholder="e.g. Dhaka North" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-3 text-[#202124] text-sm" />
             </div>
             
-            <button type="submit" disabled={isPending} className="w-full bg-[#F4B400] text-[#202124] font-bold py-3 rounded-lg hover:bg-[#d97706] transition-colors mt-2 text-sm disabled:opacity-50">
+            <button type="submit" disabled={isPending} className="w-full bg-[#F4B400] text-white font-bold py-3 rounded-lg hover:bg-[#d97706] transition-colors mt-2 text-sm disabled:opacity-50">
               {isPending ? "Adding..." : "Add Location"}
             </button>
           </form>

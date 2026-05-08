@@ -53,7 +53,7 @@ export default function AdminRoutesClient({ locations, transports, routes }: any
                 <input type="number" step="0.1" name="estimated_cost" required className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124]" />
               </div>
             </div>
-            <button type="submit" className="w-full bg-[#1A73E8] text-[#202124] font-bold py-2 rounded-lg hover:bg-[#00c489] transition-colors">Add Route</button>
+            <button type="submit" className="w-full bg-[#1A73E8] text-white font-bold py-2 rounded-lg hover:bg-[#1557B0] transition-colors">Add Route</button>
           </form>
         </div>
 

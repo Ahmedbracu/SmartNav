@@ -44,7 +44,7 @@ export default function RegisterPage() {
         <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-[#188038] opacity-20 rounded-full blur-[50px] pointer-events-none" />
         
         <div className="flex flex-col items-center mb-8 relative z-10">
-          <div className="w-16 h-16 rounded-2xl bg-[#1A73E8]/10 text-[#1A73E8] flex items-center justify-center mb-4 border border-[#1A73E8]/20 shadow-[0_0_20px_rgba(0,229,160,0.1)]">
+          <div className="w-16 h-16 rounded-2xl bg-[#1A73E8]/10 text-[#1A73E8] flex items-center justify-center mb-4 border border-[#1A73E8]/20 shadow-[0_2px_8px_rgba(26,115,232,0.1)]">
             <Map className="w-8 h-8" />
           </div>
           <h1 className="text-2xl font-bold text-[#202124] font-['Syne']">Create Account</h1>
@@ -67,7 +67,7 @@ export default function RegisterPage() {
                 name="name"
                 placeholder="John Doe" 
                 required
-                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#00e5a0] transition-all"
+                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] transition-all"
               />
             </div>
           </div>
@@ -81,7 +81,7 @@ export default function RegisterPage() {
                 name="email"
                 placeholder="you@example.com" 
                 required
-                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#00e5a0] transition-all"
+                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] transition-all"
               />
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function RegisterPage() {
                 name="password"
                 placeholder="••••••••" 
                 required
-                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#00e5a0] transition-all"
+                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] transition-all"
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ export default function RegisterPage() {
                 name="confirm_password"
                 placeholder="••••••••" 
                 required
-                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#00e5a0] transition-all"
+                className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] placeholder-[#8b949e]/50 focus:outline-none focus:border-[#1A73E8] focus:ring-1 focus:ring-[#1A73E8] transition-all"
               />
             </div>
           </div>
@@ -117,10 +117,10 @@ export default function RegisterPage() {
           <button 
             type="submit" 
             disabled={isPending}
-            className="w-full bg-gradient-to-r from-[#1A73E8] to-[#00c489] text-[#202124] font-bold py-3 rounded-lg hover:shadow-[0_0_20px_rgba(0,229,160,0.4)] transition-all flex items-center justify-center mt-4 disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-[#1A73E8] to-[#1557B0] text-white font-bold py-3 rounded-lg hover:shadow-[0_4px_12px_rgba(26,115,232,0.3)] transition-all flex items-center justify-center mt-4 disabled:opacity-50"
           >
             {isPending ? (
-              <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
             ) : (
               "Sign Up"
             )}
