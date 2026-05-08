@@ -6,7 +6,10 @@ const nextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
-  }
+  },
+  experimental: {
+    workerThreads: false,
+  },
 };
 
 module.exports = nextConfig;
