@@ -1,28 +1,31 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Navigation } from "lucide-react";
+import Image from "next/image";
 
 export default function SplashScreen() {
   const [show, setShow] = useState(true);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Only show once per session
     const hasSeenIntro = sessionStorage.getItem("smartnav_intro");
     if (hasSeenIntro) {
       setShow(false);
     } else {
+      setReady(true);
       sessionStorage.setItem("smartnav_intro", "true");
-      // Hide after 4 seconds
       const timer = setTimeout(() => setShow(false), 4000);
       return () => clearTimeout(timer);
     }
   }, []);
 
-  const handleDismiss = () => {
+  const handleDismiss = useCallback(() => {
     setShow(false);
-  };
+  }, []);
+
+  if (!ready && !show) return null;
 
   return (
     <AnimatePresence>
@@ -31,11 +34,12 @@ export default function SplashScreen() {
           onClick={handleDismiss}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer bg-gradient-to-br from-white/80 via-white/60 to-white/80 backdrop-blur-3xl overflow-hidden"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer bg-gradient-to-br from-white/80 via-white/60 to-white/80 backdrop-blur-3xl overflow-hidden"
         >
           {/* Liquid Background elements */}
           <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#1A73E8]/10 blur-[80px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#188038]/10 blur-[100px]" />
+          
           {/* Logo Animation */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -56,14 +60,24 @@ export default function SplashScreen() {
             </div>
           </motion.div>
 
-          {/* Subtext Animation */}
+          {/* HASHARC Studio with Logo */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.6 }}
-            className="text-[#5F6368] font-medium tracking-wide flex items-center gap-2"
+            className="text-[#5F6368] font-medium tracking-wide flex items-center gap-3"
           >
-            Powered by <span className="text-[#202124] font-bold">HASHARC Studio</span>
+            Powered by
+            <span className="flex items-center gap-2">
+              <Image
+                src="/HASHARC Studio.jpg"
+                alt="HASHARC Studio"
+                width={28}
+                height={28}
+                className="rounded-full object-cover border border-[#DADCE0] shadow-sm"
+              />
+              <span className="text-[#202124] font-bold">HASHARC Studio</span>
+            </span>
           </motion.div>
           
           {/* Progress Bar */}

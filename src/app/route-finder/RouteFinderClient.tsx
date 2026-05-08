@@ -72,8 +72,8 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
           <div className="space-y-1">
             <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">From</label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#188038]" />
-              <select name="source" required className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-10 pr-4 text-[#202124] appearance-none focus:outline-none focus:border-[#1A73E8]">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#188038] pointer-events-none" />
+              <select name="source" required className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#1A73E8]">
                 <option value="">Select Origin...</option>
                 {locations.map(l => (
                   <option key={l._id} value={l._id}>{l.name}</option>
@@ -85,8 +85,8 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
           <div className="space-y-1">
             <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">To</label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D93025]" />
-              <select name="destination" required className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-10 pr-4 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D93025] pointer-events-none" />
+              <select name="destination" required className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
                 <option value="">Select Destination...</option>
                 {locations.map(l => (
                   <option key={l._id} value={l._id}>{l.name}</option>
@@ -98,8 +98,8 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
           <div className="space-y-1">
             <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">Max Budget (৳)</label>
             <div className="relative">
-              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F4B400]" />
-              <input type="number" name="budget" placeholder="Any" className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-10 pr-4 text-[#202124] focus:outline-none focus:border-[#F4B400]" />
+              <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F4B400] pointer-events-none" />
+              <input type="number" name="budget" placeholder="Any" className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-11 pr-4 text-[#202124] focus:outline-none focus:border-[#F4B400]" />
             </div>
           </div>
 
