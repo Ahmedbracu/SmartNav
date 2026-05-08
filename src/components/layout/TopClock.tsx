@@ -25,7 +25,7 @@ export default function TopClock() {
   if (!mounted) return <div className="fixed top-4 right-6 z-40 text-sm font-medium text-[#5F6368] w-16 h-6" />;
 
   return (
-    <div className="fixed top-4 right-6 z-40 flex items-center glass px-4 py-1.5 rounded-full border border-white/40 shadow-sm backdrop-blur-md">
+    <div className="hidden md:flex fixed top-4 right-6 z-40 items-center glass px-4 py-1.5 rounded-full border border-white/40 shadow-sm backdrop-blur-md">
       <span className="text-sm font-semibold text-[#202124] tracking-wide">
         {time}
       </span>

@@ -47,7 +47,7 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 h-screen fixed left-0 top-0 border-r border-white/80 bg-white/60 backdrop-blur-2xl shadow-[4px_0_24px_rgba(32,33,36,0.04)] flex flex-col z-40">
+    <aside className="hidden md:flex w-64 h-screen fixed left-0 top-0 border-r border-white/80 bg-white/60 backdrop-blur-2xl shadow-[4px_0_24px_rgba(32,33,36,0.04)] flex-col z-40">
       {/* Brand */}
       <div className="h-16 flex items-center px-6 border-b border-[#DADCE0]/60">
         <div className="w-8 h-8 rounded-full bg-[#0d1117] text-[#00e5a0] flex items-center justify-center font-bold mr-3 shadow-[0_0_15px_rgba(0,229,160,0.2)] border border-[#00e5a0]/50">

@@ -114,7 +114,8 @@ export default function ReportIncidentClient({ userId, locations, recentReports 
         <div className="p-4 border-b border-[#DADCE0] bg-[#F8F9FA]/80">
           <h2 className="text-lg font-bold text-[#202124]">My Recent Reports</h2>
         </div>
-        <table className="w-full text-left text-sm">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
           <thead>
             <tr className="bg-white/60 text-[#5F6368] border-b border-[#DADCE0]">
               <th className="p-4 text-xs uppercase tracking-wider font-semibold">Type</th>
@@ -157,6 +158,7 @@ export default function ReportIncidentClient({ userId, locations, recentReports 
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

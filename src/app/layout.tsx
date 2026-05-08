@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Syne } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
+import MobileNavbar from "@/components/layout/MobileNavbar";
 import SplashScreen from "@/components/layout/SplashScreen";
 import TopClock from "@/components/layout/TopClock";
 import AuthProvider from "@/components/AuthProvider";
@@ -38,8 +39,9 @@ export default function RootLayout({
           <TopClock />
           
           <Sidebar />
+          <MobileNavbar />
           
-          <main className="flex-1 ml-64 p-8">
+          <main className="flex-1 ml-0 md:ml-64 p-4 md:p-8 pb-24 md:pb-8">
             <div className="max-w-[1200px] mx-auto page-transition">
               {children}
             </div>
