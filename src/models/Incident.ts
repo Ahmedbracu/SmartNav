@@ -6,7 +6,7 @@ export interface IIncident extends Document {
   type: string;
   severity: 'High' | 'Medium' | 'Low';
   description: string;
-  status: 'Active' | 'Resolved';
+  status: 'Active' | 'Resolved' | 'Under Review';
   reported_at: Date;
 }
 
@@ -16,7 +16,7 @@ const IncidentSchema: Schema = new Schema({
   type: { type: String, required: true },
   severity: { type: String, enum: ['High', 'Medium', 'Low'], required: true },
   description: { type: String },
-  status: { type: String, enum: ['Active', 'Resolved'], default: 'Active' },
+  status: { type: String, enum: ['Active', 'Resolved', 'Under Review'], default: 'Active' },
   reported_at: { type: Date, default: Date.now },
 });
 

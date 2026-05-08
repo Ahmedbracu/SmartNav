@@ -14,20 +14,28 @@ export default function SplashScreen() {
       setShow(false);
     } else {
       sessionStorage.setItem("smartnav_intro", "true");
-      // Hide after 3 seconds
-      const timer = setTimeout(() => setShow(false), 3000);
+      // Hide after 4 seconds
+      const timer = setTimeout(() => setShow(false), 4000);
       return () => clearTimeout(timer);
     }
   }, []);
+
+  const handleDismiss = () => {
+    setShow(false);
+  };
 
   return (
     <AnimatePresence>
       {show && (
         <motion.div
+          onClick={handleDismiss}
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.8, ease: "easeInOut" } }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white/60"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center cursor-pointer bg-gradient-to-br from-white/80 via-white/60 to-white/80 backdrop-blur-3xl overflow-hidden"
         >
+          {/* Liquid Background elements */}
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#1A73E8]/10 blur-[80px]" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#188038]/10 blur-[100px]" />
           {/* Logo Animation */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -60,14 +68,24 @@ export default function SplashScreen() {
           
           {/* Progress Bar */}
           <motion.div 
-            className="absolute bottom-16 w-48 h-1 bg-[#30363d]/40 rounded-full overflow-hidden"
+            className="absolute bottom-24 w-48 h-1 bg-[#DADCE0]/60 rounded-full overflow-hidden"
           >
             <motion.div 
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
-              transition={{ duration: 2.5, ease: "linear" }}
+              transition={{ duration: 3.5, ease: "linear" }}
               className="h-full bg-gradient-to-r from-[#1A73E8] to-[#188038]"
             />
+          </motion.div>
+
+          {/* Tap indicator */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: [0, 1, 0.5, 1], y: 0 }}
+            transition={{ delay: 2, duration: 2, repeat: Infinity }}
+            className="absolute bottom-12 text-[#5F6368] text-xs uppercase tracking-[0.2em] font-bold"
+          >
+            Tap to continue
           </motion.div>
         </motion.div>
       )}

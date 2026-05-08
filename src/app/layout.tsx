@@ -3,6 +3,7 @@ import { Inter, Syne } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/layout/Sidebar";
 import SplashScreen from "@/components/layout/SplashScreen";
+import TopClock from "@/components/layout/TopClock";
 import AuthProvider from "@/components/AuthProvider";
 
 const inter = Inter({
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <AuthProvider>
           <SplashScreen />
+          <TopClock />
           
           <Sidebar />
           

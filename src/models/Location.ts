@@ -8,7 +8,7 @@ export interface ILocation extends Document {
 }
 
 const LocationSchema: Schema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, index: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
   area_zone: { type: String, required: true },
