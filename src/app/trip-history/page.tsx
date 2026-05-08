@@ -4,7 +4,8 @@ import connectToDatabase from "@/lib/db";
 import Trip from "@/models/Trip";
 import RouteModel from "@/models/Route";
 import Location from "@/models/Location";
-import { Clock, DollarSign, Route, TrendingUp, ArrowRight, Heart } from "lucide-react";
+import mongoose from "mongoose";
+import { Clock, DollarSign, Route, TrendingUp, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default async function TripHistoryPage() {
@@ -13,10 +14,11 @@ export default async function TripHistoryPage() {
 
   await connectToDatabase();
   const userId = session.user.id;
+  const objectId = new mongoose.Types.ObjectId(userId);
 
   // Stats aggregation
   const statsAgg = await Trip.aggregate([
-    { $match: { user: userId } },
+    { $match: { user: objectId } },
     {
       $group: {
         _id: null,
@@ -30,7 +32,7 @@ export default async function TripHistoryPage() {
   const stats = statsAgg[0] || { total: 0, totalCost: 0, avgTime: 0, avgCost: 0 };
 
   // All trips (lean for perf)
-  const trips = await Trip.find({ user: userId })
+  const trips = await Trip.find({ user: objectId })
     .populate({
       path: "route",
       populate: [

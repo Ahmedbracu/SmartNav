@@ -23,19 +23,21 @@ export async function reportIncident(userId: string, formData: FormData) {
 
   try {
     await Incident.create({
+      user: userId,
       location,
       type,
       severity,
       description: description || "",
       status: "Active",
-      reported_by: userId,
       reported_at: new Date()
     });
 
     revalidatePath("/chaos-map");
     revalidatePath("/report");
-    return { success: "Incident reported successfully. It is now visible on the Chaos Map." };
-  } catch {
-    return { error: "Failed to submit report." };
+    revalidatePath("/");
+    return { success: "Incident reported successfully! It is now visible on the Chaos Map." };
+  } catch (err: any) {
+    console.error("Report incident error:", err);
+    return { error: `Failed to submit report: ${err.message}` };
   }
 }

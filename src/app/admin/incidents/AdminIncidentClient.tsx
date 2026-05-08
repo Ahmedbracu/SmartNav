@@ -84,7 +84,7 @@ export default function AdminIncidentClient({ incidents }: any) {
                           }`}
                         >
                           <option value="Active">Active</option>
-                          <option value="Investigating">Investigating</option>
+                          <option value="Under Review">Under Review</option>
                           <option value="Resolved">Resolved</option>
                         </select>
                         <button 

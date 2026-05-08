@@ -52,8 +52,8 @@ export default function ReportIncidentClient({ userId, locations, recentReports 
           <div className="space-y-1">
             <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">Location</label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5F6368]" />
-              <select name="location_id" required className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5F6368] pointer-events-none" />
+              <select name="location_id" required className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
                 <option value="">— Select location —</option>
                 {locations.map((l: any) => (
                   <option key={l._id} value={l._id}>{l.name} ({l.area_zone})</option>
@@ -65,8 +65,8 @@ export default function ReportIncidentClient({ userId, locations, recentReports 
           <div className="space-y-1">
             <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">Incident Type</label>
             <div className="relative">
-              <Activity className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5F6368]" />
-              <select name="incident_type" required className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-10 pr-4 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
+              <Activity className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5F6368] pointer-events-none" />
+              <select name="incident_type" required className="w-full bg-white/60 border border-[#DADCE0]/60 rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
                 <option value="">— Select type —</option>
                 <option value="Accident">Accident</option>
                 <option value="Flood">Flood</option>

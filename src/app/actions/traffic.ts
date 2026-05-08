@@ -16,20 +16,33 @@ export async function submitTrafficData(userId: string, formData: FormData) {
     return { error: "Please fill in all required fields." };
   }
 
+  // Validate congestion level matches schema enum
+  const validLevels = ["Gridlock", "Heavy", "Moderate", "Light"];
+  // Map user-friendly "Clear" to "Light"
+  const mappedLevel = congestion_level === "Clear" ? "Light" : congestion_level;
+  if (!validLevels.includes(mappedLevel)) {
+    return { error: "Invalid congestion level." };
+  }
+
+  // Generate time slot from current time
+  const now = new Date();
+  const hour = now.getHours();
+  const timeSlot = `${String(hour).padStart(2, '0')}:00-${String(hour + 1).padStart(2, '0')}:00`;
+
   try {
     await Traffic.create({
       location,
-      congestion_level,
+      congestion_level: mappedLevel,
       avg_speed,
-      description,
-      recorded_by: userId,
-      recorded_at: new Date()
+      date: now,
+      time_slot: timeSlot,
     });
 
     revalidatePath("/traffic");
-    revalidatePath("/route-finder"); // Revalidate routes since traffic affects it
+    revalidatePath("/route-finder");
     return { success: "Traffic data submitted successfully!" };
-  } catch {
-    return { error: "Failed to submit traffic data." };
+  } catch (err: any) {
+    console.error("Traffic submit error:", err);
+    return { error: `Failed to submit: ${err.message}` };
   }
 }

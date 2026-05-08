@@ -13,20 +13,20 @@ export default async function TrafficPage() {
 
   const recentTraffic = await Traffic.find()
     .populate("location", "name")
-    .sort({ recorded_at: -1 })
+    .sort({ date: -1 })
     .limit(20)
     .lean();
 
   const serializedTraffic = recentTraffic.map((t: any) => ({
     _id: t._id.toString(),
-    location_name: t.location?.name,
+    location_name: t.location?.name || "Unknown",
     congestion_level: t.congestion_level,
     avg_speed: t.avg_speed,
-    description: t.description,
-    recorded_at: t.recorded_at.toISOString()
+    time_slot: t.time_slot || "",
+    recorded_at: t.date ? new Date(t.date).toISOString() : new Date().toISOString()
   }));
 
-  // Mocking "worst roads" - in a real app, we'd use aggregation based on current date
+  // Worst roads — aggregate by location, lowest avg speed
   const worstRoads = await Traffic.aggregate([
     {
       $group: {

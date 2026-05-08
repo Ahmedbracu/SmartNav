@@ -109,7 +109,7 @@ export default function TrafficClient({ isLoggedIn, userId, locations, recentTra
                   <div>
                     <label className="text-xs text-[#5F6368] uppercase mb-1 block">Congestion</label>
                     <select name="congestion_level" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm">
-                      <option value="Clear">Clear</option>
+                      <option value="Light">Light / Clear</option>
                       <option value="Moderate">Moderate</option>
                       <option value="Heavy">Heavy</option>
                       <option value="Gridlock">Gridlock</option>
@@ -119,10 +119,6 @@ export default function TrafficClient({ isLoggedIn, userId, locations, recentTra
                     <label className="text-xs text-[#5F6368] uppercase mb-1 block">Speed (km/h)</label>
                     <input type="number" step="0.1" name="avg_speed" required className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm" placeholder="e.g. 15" />
                   </div>
-                </div>
-                <div>
-                  <label className="text-xs text-[#5F6368] uppercase mb-1 block">Description</label>
-                  <input type="text" name="description" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm" placeholder="Optional notes" />
                 </div>
                 <button type="submit" disabled={isPending} className="w-full bg-[#188038] text-white font-bold py-2 rounded-lg hover:bg-[#0284c7] transition-colors mt-2 text-sm disabled:opacity-50">
                   {isPending ? "Submitting..." : "Submit Report"}
@@ -146,7 +142,7 @@ export default function TrafficClient({ isLoggedIn, userId, locations, recentTra
                 <th className="p-4 text-xs uppercase tracking-wider font-semibold">Speed</th>
                 <th className="p-4 text-xs uppercase tracking-wider font-semibold">Congestion</th>
                 <th className="p-4 text-xs uppercase tracking-wider font-semibold">Time</th>
-                <th className="p-4 text-xs uppercase tracking-wider font-semibold">Notes</th>
+                <th className="p-4 text-xs uppercase tracking-wider font-semibold">Time Slot</th>
               </tr>
             </thead>
             <tbody>
@@ -163,7 +159,7 @@ export default function TrafficClient({ isLoggedIn, userId, locations, recentTra
                       </span>
                     </td>
                     <td className="p-4 text-[#5F6368] text-xs">{new Date(t.recorded_at).toLocaleString()}</td>
-                    <td className="p-4 text-[#5F6368] text-xs truncate max-w-xs">{t.description || "—"}</td>
+                    <td className="p-4 text-[#5F6368] text-xs">{t.time_slot || "—"}</td>
                   </tr>
                 ))
               )}

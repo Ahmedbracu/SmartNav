@@ -36,7 +36,7 @@ export default function RatingsClient({ isLoggedIn, userId, transports, routes, 
 
   const renderStars = (val: number, size = "w-4 h-4") => {
     return Array.from({ length: 5 }).map((_, i) => (
-      <Star key={i} className={`${size} ${i < val ? "text-[#F4B400] fill-[#fbbf24]" : "text-[#30363d]"}`} />
+      <Star key={i} className={`${size} ${i < val ? "text-[#F4B400] fill-[#fbbf24]" : "text-[#DADCE0]"}`} />
     ));
   };
 
@@ -142,11 +142,12 @@ export default function RatingsClient({ isLoggedIn, userId, transports, routes, 
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-[#5F6368] uppercase mb-1 block">Route (Optional)</label>
-                    <select name="route_id" className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm">
-                      <option value="">— General review —</option>
+                    <label className="text-xs text-[#5F6368] uppercase mb-1 block">Route <span className="text-[#D93025]">*</span></label>
+                    <select name="route_id" required className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm">
+                      <option value="">— Select route (From → To) —</option>
                       {routes.map((r:any) => <option key={r._id} value={r._id}>{r.name}</option>)}
                     </select>
+                    <p className="text-[10px] text-[#5F6368] mt-1">Which route did you use this transport on?</p>
                   </div>
                   <div>
                     <label className="text-xs text-[#5F6368] uppercase mb-2 block">Your Rating</label>
@@ -160,7 +161,7 @@ export default function RatingsClient({ isLoggedIn, userId, transports, routes, 
                           onClick={() => setRating(star)}
                           className="focus:outline-none transition-transform hover:scale-110"
                         >
-                          <Star className={`w-8 h-8 ${star <= (hoverRating || rating) ? "text-[#F4B400] fill-[#fbbf24]" : "text-[#30363d]"}`} />
+                          <Star className={`w-8 h-8 ${star <= (hoverRating || rating) ? "text-[#F4B400] fill-[#fbbf24]" : "text-[#DADCE0]"}`} />
                         </button>
                       ))}
                     </div>

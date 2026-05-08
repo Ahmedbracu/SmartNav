@@ -14,7 +14,7 @@ export default async function ReportIncidentPage() {
   const locations = await Location.find().sort({ name: 1 }).lean();
   const serializedLocations = locations.map(l => ({ _id: l._id.toString(), name: l.name, area_zone: l.area_zone }));
 
-  const recentReports = await Incident.find({ reported_by: session.user.id })
+  const recentReports = await Incident.find({ user: session.user.id })
     .populate("location", "name")
     .sort({ reported_at: -1 })
     .limit(5)

@@ -15,7 +15,7 @@ export default async function AdminIncidentPage() {
 
   const incidents = await Incident.find()
     .populate("location", "name")
-    .populate("reported_by", "name email")
+    .populate("user", "name email")
     .sort({ reported_at: -1 })
     .lean();
 
@@ -26,8 +26,8 @@ export default async function AdminIncidentPage() {
     description: i.description,
     status: i.status,
     location_name: i.location?.name || "Unknown",
-    reporter_name: i.reported_by?.name || "Unknown",
-    reporter_email: i.reported_by?.email || "Unknown",
+    reporter_name: i.user?.name || "Unknown",
+    reporter_email: i.user?.email || "Unknown",
     reported_at: i.reported_at.toISOString()
   }));
 
