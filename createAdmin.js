@@ -5,9 +5,9 @@ const bcrypt = require('bcryptjs');
 const MONGODB_URI = "mongodb+srv://ghostslayer2703_db_user:4gpMLhRtZUbhe91T@cluster0.jncdrq7.mongodb.net/smartnav?retryWrites=true&w=majority&appName=Cluster0";
 
 // CHANGE THESE TO YOUR PREFERRED ADMIN CREDENTIALS
-const ADMIN_NAME = "SmartNav Admin";
-const ADMIN_EMAIL = "admin@smartnav.com"; // <--- Put your actual email here
-const ADMIN_PASSWORD = "secure_admin_password"; // <--- Put your actual password here
+const ADMIN_NAME = "Ahmed Ibn Belal";
+const ADMIN_EMAIL = "ahmedabubakar.official@gmail.com"; // <--- Put your actual email here
+const ADMIN_PASSWORD = "KyaAdminBanegaReTu0?"; // <--- Put your actual password here
 
 async function createAdmin() {
   try {
