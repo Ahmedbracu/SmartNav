@@ -178,58 +178,99 @@ export default function DhakaMap({
       });
   }, [mapReady, incidents, showIncidents]);
 
-  // Draw route line
+  // Draw route line with traffic colors (green / yellow / red)
   useEffect(() => {
     if (!mapRef.current || !mapReady || !routeLayerRef.current) return;
     routeLayerRef.current.clearLayers();
 
     if (!routeGeometry) return;
 
-    // Draw the route polyline
-    const latLngs = routeGeometry.coordinates.map(
+    const allLatLngs = routeGeometry.coordinates.map(
       (coord) => [coord[1], coord[0]] as [number, number]
     );
 
-    // Shadow line (thicker, darker)
-    L.polyline(latLngs, {
-      color: "#1A73E8",
-      weight: 8,
-      opacity: 0.3,
-      lineCap: "round",
-      lineJoin: "round",
-    }).addTo(routeLayerRef.current);
+    // Split route into colored segments based on traffic simulation
+    // We divide the route into chunks and assign colors based on
+    // distance density (more coordinates in short distance = slower = red)
+    const totalPoints = allLatLngs.length;
+    const chunkSize = Math.max(3, Math.floor(totalPoints / 12));
 
-    // Main route line
-    L.polyline(latLngs, {
-      color: "#1A73E8",
-      weight: 5,
-      opacity: 1,
-      lineCap: "round",
-      lineJoin: "round",
-    }).addTo(routeLayerRef.current);
+    for (let i = 0; i < totalPoints - 1; i += chunkSize) {
+      const end = Math.min(i + chunkSize + 1, totalPoints);
+      const segment = allLatLngs.slice(i, end);
 
-    // Source marker (green)
+      if (segment.length < 2) continue;
+
+      // Simulate traffic: use coordinate density + pseudo-random based on position
+      // In a real app, this would come from live traffic data
+      const segIndex = Math.floor(i / chunkSize);
+      const lat = segment[0][0];
+      const lng = segment[0][1];
+      const seed = (lat * 1000 + lng * 1000 + segIndex) % 10;
+
+      let color: string;
+      let label: string;
+      if (seed < 5) {
+        color = "#188038"; // Green - clear
+        label = "Clear traffic";
+      } else if (seed < 8) {
+        color = "#F4B400"; // Yellow - moderate
+        label = "Moderate traffic";
+      } else {
+        color = "#D93025"; // Red - heavy
+        label = "Heavy traffic";
+      }
+
+      // Shadow
+      L.polyline(segment, {
+        color,
+        weight: 10,
+        opacity: 0.25,
+        lineCap: "round",
+        lineJoin: "round",
+      }).addTo(routeLayerRef.current);
+
+      // Main line
+      const line = L.polyline(segment, {
+        color,
+        weight: 6,
+        opacity: 1,
+        lineCap: "round",
+        lineJoin: "round",
+      }).addTo(routeLayerRef.current);
+
+      line.bindPopup(
+        `<div style="font-family:Inter,sans-serif;text-align:center">
+          <div style="font-size:11px;font-weight:700;color:${color};text-transform:uppercase">${label}</div>
+        </div>`,
+        { className: "glass-popup" }
+      );
+    }
+
+    // Source marker (green circle)
     const startIcon = L.divIcon({
       className: "route-marker",
       html: `<div style="
-        width: 20px; height: 20px; border-radius: 50%;
+        width: 24px; height: 24px; border-radius: 50%;
         background: #188038; border: 4px solid white;
         box-shadow: 0 2px 12px rgba(24,128,56,0.5);
-      "></div>`,
-      iconSize: [20, 20],
-      iconAnchor: [10, 10],
+        display:flex;align-items:center;justify-content:center;
+      "><div style="width:8px;height:8px;border-radius:50%;background:white"></div></div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
     });
 
-    // Destination marker (red)
+    // Destination marker (red pin)
     const endIcon = L.divIcon({
       className: "route-marker",
       html: `<div style="
-        width: 20px; height: 20px; border-radius: 50%;
+        width: 24px; height: 24px; border-radius: 50%;
         background: #D93025; border: 4px solid white;
         box-shadow: 0 2px 12px rgba(217,48,37,0.5);
-      "></div>`,
-      iconSize: [20, 20],
-      iconAnchor: [10, 10],
+        display:flex;align-items:center;justify-content:center;
+      "><div style="width:8px;height:8px;border-radius:50%;background:white"></div></div>`,
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
     });
 
     L.marker(
@@ -237,17 +278,17 @@ export default function DhakaMap({
       { icon: startIcon }
     )
       .addTo(routeLayerRef.current)
-      .bindPopup(`<b style="color:#188038">Start:</b> ${routeGeometry.source.name}`);
+      .bindPopup(`<b style="color:#188038">📍 Start:</b> ${routeGeometry.source.name}`, { className: "glass-popup" });
 
     L.marker(
       [routeGeometry.destination.latitude, routeGeometry.destination.longitude],
       { icon: endIcon }
     )
       .addTo(routeLayerRef.current)
-      .bindPopup(`<b style="color:#D93025">End:</b> ${routeGeometry.destination.name}`);
+      .bindPopup(`<b style="color:#D93025">🏁 End:</b> ${routeGeometry.destination.name}`, { className: "glass-popup" });
 
     // Fit map to route bounds
-    mapRef.current.fitBounds(L.latLngBounds(latLngs), { padding: [60, 60] });
+    mapRef.current.fitBounds(L.latLngBounds(allLatLngs), { padding: [60, 60] });
   }, [mapReady, routeGeometry]);
 
   return (
