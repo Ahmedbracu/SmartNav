@@ -14,116 +14,117 @@ export async function findRoutes(sourceId: string, destId: string, budget: numbe
     return { error: "Source and destination cannot be the same." };
   }
 
-  // Find routes matching source and destination
-  const routes = await RouteModel.find({
-    source_location: sourceId,
-    destination_location: destId,
-  })
-    .populate("source_location")
-    .populate("destination_location")
-    .populate({
-      path: "segments.transport",
-      model: TransportMode,
-    })
-    .populate({
-      path: "segments.start_location",
-      model: Location,
-    })
-    .populate({
-      path: "segments.end_location",
-      model: Location,
-    })
-    .lean();
+  const sourceLoc = await Location.findById(sourceId);
+  const destLoc = await Location.findById(destId);
 
-  if (!routes || routes.length === 0) {
-    return { routes: [] };
+  if (!sourceLoc || !destLoc) {
+    return { error: "Invalid locations." };
   }
 
-  const currentHour = new Date().getHours() + ":00-00:00"; // Simplified for porting
+  // Fetch real distance from OSRM
+  let distanceKm = 0;
+  let durationMin = 0;
 
-  // Dynamic Calculation
-  const processedRoutes = await Promise.all(
-    routes.map(async (route: any) => {
-      let adjustedTime = 0;
-      let minCost = Infinity;
-      let maxCost = 0;
-      let hasSegments = false;
-      let isOverBudget = false;
+  try {
+    const res = await fetch(`http://router.project-osrm.org/route/v1/driving/${sourceLoc.longitude},${sourceLoc.latitude};${destLoc.longitude},${destLoc.latitude}?overview=false`, { next: { revalidate: 3600 } });
+    const data = await res.json();
+    if (data.routes && data.routes[0]) {
+      distanceKm = data.routes[0].distance / 1000;
+      durationMin = data.routes[0].duration / 60;
+    }
+  } catch (e) {
+    console.error("OSRM failed", e);
+  }
 
-      // Extract all unique location IDs in the route to fetch traffic/incidents
-      const locationIds = new Set<string>();
-      route.segments.forEach((seg: any) => {
-        locationIds.add(seg.start_location._id.toString());
-        locationIds.add(seg.end_location._id.toString());
-        
-        hasSegments = true;
-        const c = seg.cost;
-        if (c < minCost) minCost = c;
-        if (c > maxCost) maxCost = c;
-      });
+  // Fallback Haversine if OSRM fails
+  if (distanceKm === 0) {
+    const R = 6371; // km
+    const dLat = (destLoc.latitude - sourceLoc.latitude) * Math.PI / 180;
+    const dLon = (destLoc.longitude - sourceLoc.longitude) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(sourceLoc.latitude * Math.PI / 180) * Math.cos(destLoc.latitude * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    distanceKm = R * c * 1.4; // 1.4 winding factor
+    durationMin = distanceKm * 3; // roughly 20km/h
+  }
 
-      if (!hasSegments) {
-        return null;
-      }
-
-      // Fetch Traffic Data for these locations
-      const trafficData = await Traffic.find({
-        location: { $in: Array.from(locationIds) },
-        // In real app: match current date and time_slot
-      }).lean();
-
-      const trafficByLoc = trafficData.reduce((acc: any, t: any) => {
-        acc[t.location.toString()] = t;
-        return acc;
-      }, {});
-
-      // Calculate adjusted time per segment
-      route.segments.forEach((seg: any) => {
-        let multiplier = 1.0;
-        [seg.start_location._id.toString(), seg.end_location._id.toString()].forEach(lid => {
-          if (trafficByLoc[lid]) {
-            const cong = trafficByLoc[lid].congestion_level;
-            let m = 1.0;
-            if (cong === 'Gridlock') m = 2.5;
-            else if (cong === 'Heavy') m = 1.8;
-            else if (cong === 'Moderate') m = 1.3;
-            if (m > multiplier) multiplier = m;
-          }
-        });
-        
-        // Apply multiplier
-        seg.adjusted_time = Math.round(seg.time * multiplier);
-        adjustedTime += seg.adjusted_time;
-      });
-
-      // Budget check: If even the minimum possible cost is higher than budget
-      if (minCost > budget) {
-        isOverBudget = true;
-      }
-
-      return {
-        _id: route._id.toString(),
-        source_name: route.source_location.name,
-        dest_name: route.destination_location.name,
-        total_distance: route.total_distance,
-        estimated_time: route.estimated_time,
-        adjusted_time: adjustedTime,
-        min_seg_cost: minCost,
-        max_seg_cost: maxCost,
-        is_over_budget: isOverBudget,
-        segments: route.segments.map((s:any) => ({
-          ...s,
-          _id: s._id.toString(),
-          transport_type: s.transport.type
-        }))
-      };
-    })
-  );
-
-  const validRoutes = processedRoutes.filter(r => r !== null);
+  // Fetch Traffic Data to adjust duration
+  const trafficData = await Traffic.find({ location: { $in: [sourceId, destId] } }).lean();
+  let trafficMultiplier = 1.0;
   
-  // Sort by adjusted time
-  validRoutes.sort((a, b) => (a?.adjusted_time || 0) - (b?.adjusted_time || 0));
+  trafficData.forEach((t: any) => {
+    let m = 1.0;
+    if (t.congestion_level === 'Gridlock') m = 2.2;
+    else if (t.congestion_level === 'Heavy') m = 1.6;
+    else if (t.congestion_level === 'Moderate') m = 1.2;
+    if (m > trafficMultiplier) trafficMultiplier = m;
+  });
 
-  return { routes: validRoutes };
+  // Dynamic Uber-style Options
+  const baseOptions = [
+    { type: "Bike", baseFare: 40, perKm: 12, timeMult: 0.8 },
+    { type: "CNG Auto", baseFare: 50, perKm: 15, timeMult: 1.0 },
+    { type: "Car (Uber X)", baseFare: 80, perKm: 25, timeMult: 1.2 },
+    { type: "Local Bus", baseFare: 10, perKm: 2.5, timeMult: 1.6 },
+  ];
+
+  const generatedRoutes = baseOptions.map((opt, index) => {
+    const cost = Math.round(opt.baseFare + (distanceKm * opt.perKm));
+    const time = Math.round(durationMin * opt.timeMult * trafficMultiplier);
+    
+    return {
+      _id: `dynamic_${index}`,
+      source_name: sourceLoc.name,
+      dest_name: destLoc.name,
+      total_distance: Math.round(distanceKm * 10) / 10,
+      adjusted_time: time,
+      min_seg_cost: cost,
+      max_seg_cost: cost,
+      is_over_budget: cost > budget,
+      transport_type: opt.type,
+      segments: [
+        {
+          _id: `seg_${index}`,
+          transport_type: opt.type,
+          cost: cost
+        }
+      ]
+    };
+  });
+
+  // Filter out those over budget if budget is strict (optional, but requested)
+  // Actually, let's keep them but flag them as is_over_budget so user can still see them
+  const validRoutes = generatedRoutes;
+
+  // Find Cheapest and Fastest
+  validRoutes.sort((a, b) => a.adjusted_time - b.adjusted_time);
+  const fastestRoute = validRoutes[0];
+  
+  const affordableRoutes = [...validRoutes].sort((a, b) => a.min_seg_cost - b.min_seg_cost);
+  const cheapestRoute = affordableRoutes[0];
+
+  validRoutes.forEach(r => {
+    (r as any).is_fastest = r._id === fastestRoute._id;
+    (r as any).is_cheapest = r._id === cheapestRoute._id;
+  });
+
+  // AI Recommendation Engine
+  let aiInsight = "";
+  if (fastestRoute._id === cheapestRoute._id) {
+    aiInsight = `✨ AI Insight: Taking a ${fastestRoute.transport_type} is a no-brainer. It is both the fastest (${fastestRoute.adjusted_time} mins) and cheapest (৳${fastestRoute.min_seg_cost}) option available.`;
+  } else {
+    const timeSaved = cheapestRoute.adjusted_time - fastestRoute.adjusted_time;
+    const extraCost = fastestRoute.min_seg_cost - cheapestRoute.min_seg_cost;
+    
+    if (timeSaved > 15 && extraCost < 100) {
+      aiInsight = `✨ AI Insight: Taking a ${fastestRoute.transport_type} saves you ${timeSaved} minutes for an extra ৳${extraCost}. Given the current traffic, this is highly recommended for urgent travel.`;
+    } else if (timeSaved < 10 && extraCost > 50) {
+      aiInsight = `✨ AI Insight: The fastest option (${fastestRoute.transport_type}) only saves you ${timeSaved} minutes but costs ৳${extraCost} more. Save your money and take the ${cheapestRoute.transport_type} instead.`;
+    } else {
+      aiInsight = `✨ AI Insight: The ${cheapestRoute.transport_type} is the most economical choice at ৳${cheapestRoute.min_seg_cost}, but if you are in a rush, switch to a ${fastestRoute.transport_type} to save ${timeSaved} mins.`;
+    }
+  }
+
+  return { routes: validRoutes, ai_insight: aiInsight };
 }

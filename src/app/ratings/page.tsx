@@ -14,11 +14,8 @@ export default async function RatingsPage() {
   const transports = await TransportMode.find().sort({ type: 1 }).lean();
   const serializedTransports = transports.map(t => ({ _id: t._id.toString(), type: t.type, base_fare: t.base_fare, average_speed: t.average_speed }));
 
-  const routes = await RouteModel.find().populate("source_location destination_location").sort({ _id: -1 }).lean();
-  const serializedRoutes = routes.map((r: any) => ({
-    _id: r._id.toString(),
-    name: `${r.source_location?.name || "Unknown"} → ${r.destination_location?.name || "Unknown"}`
-  }));
+  const locationsData = await Location.find().sort({ name: 1 }).lean();
+  const serializedLocations = locationsData.map(l => ({ _id: l._id.toString(), name: l.name }));
 
   // Overall Ratings Aggregation
   const overallAgg = await Review.aggregate([
@@ -99,7 +96,7 @@ export default async function RatingsPage() {
       isLoggedIn={!!session?.user?.id}
       userId={session?.user?.id}
       transports={serializedTransports}
-      routes={serializedRoutes}
+      locations={serializedLocations}
       overallRatings={overallRatings}
       recentReviews={serializedReviews}
       myReviews={serializedMyReviews}

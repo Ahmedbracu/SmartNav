@@ -5,7 +5,7 @@ import { Star, MessageSquare, PlusCircle, CheckCircle2, AlertCircle } from "luci
 import { submitReview } from "@/app/actions/review";
 import Link from "next/link";
 
-export default function RatingsClient({ isLoggedIn, userId, transports, routes, overallRatings, recentReviews, myReviews }: any) {
+export default function RatingsClient({ isLoggedIn, userId, transports, locations, overallRatings, recentReviews, myReviews }: any) {
   const [isPending, setIsPending] = useState(false);
   const [msg, setMsg] = useState("");
   const [isError, setIsError] = useState(false);
@@ -141,14 +141,23 @@ export default function RatingsClient({ isLoggedIn, userId, transports, routes, 
                       {transports.map((t:any) => <option key={t._id} value={t._id}>{t.type}</option>)}
                     </select>
                   </div>
-                  <div>
-                    <label className="text-xs text-[#5F6368] uppercase mb-1 block">Route <span className="text-[#D93025]">*</span></label>
-                    <select name="route_id" required className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm">
-                      <option value="">— Select route (From → To) —</option>
-                      {routes.map((r:any) => <option key={r._id} value={r._id}>{r.name}</option>)}
-                    </select>
-                    <p className="text-[10px] text-[#5F6368] mt-1">Which route did you use this transport on?</p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-xs text-[#5F6368] uppercase mb-1 block">From <span className="text-[#D93025]">*</span></label>
+                      <select name="source_id" required className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm">
+                        <option value="">— Origin —</option>
+                        {locations.map((l:any) => <option key={l._id} value={l._id}>{l.name}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-xs text-[#5F6368] uppercase mb-1 block">To <span className="text-[#D93025]">*</span></label>
+                      <select name="dest_id" required className="w-full bg-white/60 border border-[#DADCE0] rounded-lg p-2 text-[#202124] text-sm">
+                        <option value="">— Destination —</option>
+                        {locations.map((l:any) => <option key={l._id} value={l._id}>{l.name}</option>)}
+                      </select>
+                    </div>
                   </div>
+                  <p className="text-[10px] text-[#5F6368] mt-1">Which route did you use this transport on?</p>
                   <div>
                     <label className="text-xs text-[#5F6368] uppercase mb-2 block">Your Rating</label>
                     <div className="flex gap-2">

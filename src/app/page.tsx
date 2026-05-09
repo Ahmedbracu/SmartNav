@@ -1,19 +1,32 @@
 import Link from "next/link";
-import { Users, Route, AlertTriangle, Clock, Map, Flag, Activity } from "lucide-react";
+import { Users, Route, AlertTriangle, Clock, Map, Flag, Activity, Navigation } from "lucide-react";
 import connectToDatabase from "@/lib/db";
+import { auth } from "@/auth";
 import User from "@/models/User";
 import RouteModel from "@/models/Route";
 import Incident from "@/models/Incident";
 import Trip from "@/models/Trip";
+import Location from "@/models/Location";
+import QuickSearchWidget from "@/components/dashboard/QuickSearchWidget";
 
 export default async function Dashboard() {
+  const session = await auth();
   await connectToDatabase();
+
+  const userName = session?.user?.name?.split(" ")[0] || "Traveler";
+  const hour = new Date().getHours();
+  let greeting = "Good Evening";
+  if (hour < 12) greeting = "Good Morning";
+  else if (hour < 18) greeting = "Good Afternoon";
 
   // Fetch real stats from MongoDB
   const totalUsers = await User.countDocuments();
   const totalRoutes = await RouteModel.countDocuments();
   const activeIncidents = await Incident.countDocuments({ status: "Active" });
   const totalTrips = await Trip.countDocuments();
+  
+  const locations = await Location.find().sort({ name: 1 }).lean();
+  const serializedLocations = locations.map(l => ({ _id: l._id.toString(), name: l.name }));
 
   // Fetch Recent Incidents
   const recentIncidents = await Incident.find({ status: "Active" })
@@ -24,10 +37,17 @@ export default async function Dashboard() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">
-      <div>
-        <h1 className="text-3xl font-bold text-[#202124] mb-2 font-['Syne']">Dashboard</h1>
-        <p className="text-[#5F6368]">Welcome to SmartNav. Here is the current state of Dhaka&apos;s transit network.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-[#202124] mb-1 font-['Syne']">{greeting}, {userName}!</h1>
+          <p className="text-[#5F6368] font-medium">Ready to navigate Dhaka today?</p>
+        </div>
+        <div className="hidden md:flex items-center gap-2 bg-[#1A73E8]/10 text-[#1A73E8] px-4 py-2 rounded-full font-bold text-sm">
+          <Navigation className="w-4 h-4" /> Live Network Active
+        </div>
       </div>
+
+      <QuickSearchWidget locations={serializedLocations} />
 
       {/* STAT CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

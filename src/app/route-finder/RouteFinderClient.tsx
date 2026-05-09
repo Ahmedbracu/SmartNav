@@ -11,6 +11,7 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
   const [routes, setRoutes] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [aiInsight, setAiInsight] = useState("");
   const [searched, setSearched] = useState(false);
   const [routeGeometry, setRouteGeometry] = useState<any>(null);
   const [selectedSource, setSelectedSource] = useState("");
@@ -34,8 +35,10 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
     if (result.error) {
       setError(result.error);
       setRoutes([]);
+      setAiInsight("");
     } else {
       setRoutes(result.routes || []);
+      setAiInsight(result.ai_insight || "");
       
       // Fetch real road geometry from OSRM
       const srcLoc = locations.find(l => l._id === source);
@@ -148,6 +151,13 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
 
       {searched && !loading && !error && (
         <div className="mt-8 space-y-4 animate-in slide-in-from-bottom-4 duration-500">
+          
+          {aiInsight && (
+            <div className="glass-card mb-6 bg-gradient-to-r from-[#1A73E8]/5 to-transparent border-l-4 border-l-[#1A73E8]">
+              <p className="text-[#202124] font-medium text-sm leading-relaxed">{aiInsight}</p>
+            </div>
+          )}
+
           <div className="flex items-center gap-2 mb-4 border-b border-[#DADCE0] pb-2">
             <h2 className="text-xl font-bold text-[#202124] font-['Syne']">Transport Options</h2>
             <span className="bg-[#1A73E8]/10 text-[#1A73E8] text-xs px-2 py-1 rounded-full font-bold">{routes.length} found</span>
@@ -160,45 +170,33 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
             </div>
           ) : (
             routes.map(r => (
-              <div key={r._id} className="glass-card hover:border-[#1A73E8]/40 transition-all">
-                <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+              <div key={r._id} className={`glass-card hover:border-[#1A73E8]/40 transition-all ${r.is_fastest ? 'border-[#1A73E8]/30 shadow-[0_0_15px_rgba(26,115,232,0.1)]' : ''}`}>
+                <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <div className="flex items-center gap-3 text-lg font-bold text-[#202124] mb-2">
-                      <span>{r.source_name}</span>
-                      <ArrowRight className="w-5 h-5 text-[#5F6368]" />
-                      <span>{r.dest_name}</span>
+                    <div className="flex items-center gap-3 text-lg font-bold text-[#202124] mb-1">
+                      <span>{r.transport_type}</span>
+                      {r.is_fastest && <span className="text-[10px] bg-[#1A73E8] text-white px-2 py-0.5 rounded-full uppercase tracking-wider">Fastest</span>}
+                      {r.is_cheapest && <span className="text-[10px] bg-[#188038] text-white px-2 py-0.5 rounded-full uppercase tracking-wider">Cheapest</span>}
                     </div>
                     
                     <div className="flex flex-wrap items-center gap-4 text-sm text-[#5F6368]">
                       <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-[#188038]"/> {r.total_distance} km</span>
-                      <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-[#F4B400]"/> {r.adjusted_time} min</span>
-                      <span className="flex items-center gap-1.5 font-bold text-[#202124] bg-[#1A73E8]/10 px-2 py-1 rounded">
-                        ৳{r.min_seg_cost} {r.max_seg_cost > r.min_seg_cost ? `- ${r.max_seg_cost}` : ''}
-                      </span>
+                      <span className="flex items-center gap-1.5 font-bold"><Clock className="w-4 h-4 text-[#F4B400]"/> {r.adjusted_time} min</span>
                     </div>
                   </div>
 
-                  {r.is_over_budget && (
-                    <div className="bg-[#D93025]/10 text-[#D93025] text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 uppercase tracking-wider">
-                      <AlertCircle className="w-4 h-4" /> Over Budget
-                    </div>
-                  )}
-                </div>
-
-                <div className="bg-white/60 p-4 rounded-lg border border-[#DADCE0]/60">
-                  <h4 className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider mb-3">Segments</h4>
-                  <div className="space-y-2">
-                    {r.segments.map((seg: any) => (
-                      <div key={seg._id} className="flex items-center justify-between bg-[#F8F9FA] p-3 rounded-lg border border-[#DADCE0]/40">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[#1A73E8] font-bold text-sm bg-[#1A73E8]/10 px-2 py-1 rounded">{seg.transport_type}</span>
-                          <span className="text-sm text-[#202124]">৳{seg.cost}</span>
-                        </div>
-                        <button className="text-xs font-semibold flex items-center gap-1 text-[#188038] hover:text-[#202124] transition-colors">
-                          <CheckCircle2 className="w-4 h-4" /> Select
-                        </button>
+                  <div className="text-right flex items-center gap-4">
+                    {r.is_over_budget && (
+                      <div className="bg-[#D93025]/10 text-[#D93025] text-[10px] font-bold px-2 py-1 rounded flex items-center gap-1 uppercase">
+                        <AlertCircle className="w-3 h-3" /> Over Budget
                       </div>
-                    ))}
+                    )}
+                    <span className="font-bold text-2xl text-[#202124]">
+                      ৳{r.min_seg_cost}
+                    </span>
+                    <button className="bg-[#1A73E8] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-[#1557B0] transition-colors shadow-sm">
+                      Select
+                    </button>
                   </div>
                 </div>
               </div>
