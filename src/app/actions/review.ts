@@ -39,6 +39,7 @@ export async function submitReview(userId: string, formData: FormData) {
           destination_location: dest_id,
           total_distance: 10, // Generic default distance
           estimated_time: 30, // Generic default time
+          estimated_cost: 0, // Fix validation error
           segments: [] 
         });
       }

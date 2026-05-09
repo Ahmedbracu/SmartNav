@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { findRoutes } from "@/app/actions/routeAction";
 import { Search, MapPin, DollarSign, ArrowRight, AlertCircle, Clock, CheckCircle2, Navigation } from "lucide-react";
@@ -16,6 +17,22 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
   const [routeGeometry, setRouteGeometry] = useState<any>(null);
   const [selectedSource, setSelectedSource] = useState("");
   const [selectedDest, setSelectedDest] = useState("");
+  const [bookingConfirmed, setBookingConfirmed] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const s = searchParams.get("source");
+    const d = searchParams.get("destination");
+    if (s && d && !searched) {
+      const formData = new FormData();
+      formData.append("source", s);
+      formData.append("destination", d);
+      formData.append("budget", "");
+      handleSearch(formData);
+    }
+  }, [searchParams, searched]);
 
   async function handleSearch(formData: FormData) {
     setLoading(true);
@@ -70,13 +87,13 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
   return (
     <>
       {/* Search Form */}
-      <form action={handleSearch} className="glass-card mb-6">
+      <form ref={formRef} action={handleSearch} className="glass-card mb-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           <div className="space-y-1">
             <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">From</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#188038] pointer-events-none" />
-              <select name="source" required className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#1A73E8]">
+              <select name="source" required defaultValue={searchParams.get("source") || ""} className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#1A73E8]">
                 <option value="">Select Origin...</option>
                 {locations.map(l => (
                   <option key={l._id} value={l._id}>{l.name}</option>
@@ -89,7 +106,7 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
             <label className="text-xs font-semibold text-[#5F6368] uppercase tracking-wider ml-1">To</label>
             <div className="relative">
               <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#D93025] pointer-events-none" />
-              <select name="destination" required className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
+              <select name="destination" required defaultValue={searchParams.get("destination") || ""} className="w-full bg-white/80 border border-[#DADCE0] rounded-lg py-3 pl-11 pr-8 text-[#202124] appearance-none focus:outline-none focus:border-[#D93025]">
                 <option value="">Select Destination...</option>
                 {locations.map(l => (
                   <option key={l._id} value={l._id}>{l.name}</option>
@@ -194,8 +211,14 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
                     <span className="font-bold text-2xl text-[#202124]">
                       ৳{r.min_seg_cost}
                     </span>
-                    <button className="bg-[#1A73E8] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-[#1557B0] transition-colors shadow-sm">
-                      Select
+                    <button 
+                      onClick={() => {
+                        setBookingConfirmed(r._id);
+                        setTimeout(() => setBookingConfirmed(null), 3000);
+                      }}
+                      className="bg-[#1A73E8] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-[#1557B0] transition-colors shadow-sm flex items-center gap-2"
+                    >
+                      {bookingConfirmed === r._id ? <><CheckCircle2 className="w-4 h-4" /> Selected</> : "Select"}
                     </button>
                   </div>
                 </div>

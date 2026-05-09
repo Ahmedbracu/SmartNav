@@ -1,11 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import { AlertTriangle } from "lucide-react";
 
 const DhakaMap = dynamic(() => import("@/components/map/DhakaMap"), { ssr: false });
 
 export default function ChaosMapClient({ locations, incidents }: any) {
+  const [mapCenter, setMapCenter] = useState<[number, number] | undefined>(undefined);
+  const [mapZoom, setMapZoom] = useState(13);
+
+  const handleIncidentClick = (inc: any) => {
+    setMapCenter([inc.latitude, inc.longitude]);
+    setMapZoom(16);
+  };
+
   const highCount = incidents.filter((i: any) => i.severity === "High").length;
   const medCount = incidents.filter((i: any) => i.severity === "Medium").length;
   const lowCount = incidents.filter((i: any) => i.severity === "Low").length;
@@ -43,6 +52,8 @@ export default function ChaosMapClient({ locations, incidents }: any) {
         height="600px"
         showLocations={true}
         showIncidents={true}
+        center={mapCenter || [23.7806, 90.3964]}
+        zoom={mapZoom}
       />
 
       {/* Legend */}
@@ -62,6 +73,33 @@ export default function ChaosMapClient({ locations, incidents }: any) {
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded-full bg-[#188038] border-2 border-white shadow"></div>
           <span className="text-[#5F6368]">Low Severity</span>
+        </div>
+      </div>
+
+      {/* Incident List Tabs */}
+      <div className="mt-12">
+        <h2 className="text-xl font-bold text-[#202124] mb-4 font-['Syne']">Active Incident Reports</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {incidents.filter((i:any) => i.status === "Active").map((inc: any) => (
+            <button 
+              key={inc._id}
+              onClick={() => handleIncidentClick(inc)}
+              className="text-left glass-card hover:-translate-y-1 hover:shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-[#1A73E8]"
+            >
+              <div className="flex justify-between items-start mb-2">
+                <span className={`text-[10px] uppercase font-bold tracking-wider px-2 py-1 rounded ${
+                  inc.severity === 'High' ? 'bg-[#D93025]/10 text-[#D93025]' : 
+                  inc.severity === 'Medium' ? 'bg-[#F4B400]/10 text-[#F4B400]' : 
+                  'bg-[#188038]/10 text-[#188038]'
+                }`}>
+                  {inc.severity} Severity
+                </span>
+                <span className="text-xs text-[#5F6368]">{new Date(inc.reported_at).toLocaleTimeString()}</span>
+              </div>
+              <h3 className="font-bold text-[#202124] text-lg mb-1">{inc.type}</h3>
+              <p className="text-sm text-[#5F6368] flex items-center gap-1.5"><AlertTriangle className="w-4 h-4"/> {inc.location_name}</p>
+            </button>
+          ))}
         </div>
       </div>
     </div>

@@ -90,6 +90,13 @@ export default function DhakaMap({
     };
   }, []);
 
+  // Fly to center if it changes
+  useEffect(() => {
+    if (mapReady && mapRef.current && center) {
+      mapRef.current.flyTo(center, zoom, { duration: 1 });
+    }
+  }, [center, zoom, mapReady]);
+
   // Add location markers
   useEffect(() => {
     if (!mapRef.current || !mapReady || !showLocations) return;

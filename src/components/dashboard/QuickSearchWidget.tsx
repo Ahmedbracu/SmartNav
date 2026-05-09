@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { MapPin, Search } from "lucide-react";
+import dynamic from "next/dynamic";
+
+const DhakaMap = dynamic(() => import("@/components/map/DhakaMap"), { ssr: false });
 
 export default function QuickSearchWidget({ locations }: { locations: any[] }) {
   const router = useRouter();
@@ -12,14 +15,21 @@ export default function QuickSearchWidget({ locations }: { locations: any[] }) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (source && dest) {
-      // In a real app, you might pass these via query params or context
-      // For now, we redirect to route-finder
-      router.push("/route-finder");
+      router.push(`/route-finder?source=${source}&destination=${dest}`);
     }
   };
 
   return (
-    <form onSubmit={handleSearch} className="glass-card mb-8 relative overflow-hidden group">
+    <>
+      <div className="glass-card p-2 mb-4">
+        <DhakaMap 
+          locations={locations} 
+          showLocations={true} 
+          height="350px" 
+        />
+      </div>
+
+      <form onSubmit={handleSearch} className="glass-card mb-8 relative overflow-hidden group">
       {/* Animated background blob */}
       <div className="absolute -right-20 -top-20 w-64 h-64 bg-gradient-to-br from-[#1A73E8]/20 to-[#00e5a0]/10 rounded-full blur-[60px] group-hover:scale-110 transition-transform duration-700 pointer-events-none"></div>
       
@@ -57,5 +67,6 @@ export default function QuickSearchWidget({ locations }: { locations: any[] }) {
         </button>
       </div>
     </form>
+    </>
   );
 }

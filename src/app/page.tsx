@@ -26,7 +26,13 @@ export default async function Dashboard() {
   const totalTrips = await Trip.countDocuments();
   
   const locations = await Location.find().sort({ name: 1 }).lean();
-  const serializedLocations = locations.map(l => ({ _id: l._id.toString(), name: l.name }));
+  const serializedLocations = locations.map(l => ({ 
+    _id: l._id.toString(), 
+    name: l.name,
+    latitude: l.latitude,
+    longitude: l.longitude,
+    area_zone: l.area_zone
+  }));
 
   // Fetch Recent Incidents
   const recentIncidents = await Incident.find({ status: "Active" })

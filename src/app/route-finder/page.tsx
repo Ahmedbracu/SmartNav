@@ -2,6 +2,7 @@ import { Navigation } from "lucide-react";
 import connectToDatabase from "@/lib/db";
 import Location from "@/models/Location";
 import RouteFinderClient from "./RouteFinderClient";
+import { Suspense } from "react";
 
 export default async function RouteFinderPage() {
   await connectToDatabase();
@@ -27,7 +28,9 @@ export default async function RouteFinderPage() {
         <p className="text-[#5F6368]">Find the fastest and cheapest multi-modal routes across Dhaka. Routes are drawn on real roads.</p>
       </div>
 
-      <RouteFinderClient locations={locList} />
+      <Suspense fallback={<div className="p-12 text-center text-[#5F6368] animate-pulse">Loading Route Engine...</div>}>
+        <RouteFinderClient locations={locList} />
+      </Suspense>
     </div>
   );
 }
