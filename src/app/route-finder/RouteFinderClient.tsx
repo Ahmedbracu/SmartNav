@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { createPortal } from "react-dom";
 import { findRoutes } from "@/app/actions/routeAction";
 import { createTrip } from "@/app/actions/tripAction";
 import { Search, MapPin, DollarSign, ArrowRight, AlertCircle, Clock, CheckCircle2, Navigation } from "lucide-react";
@@ -22,11 +23,13 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
   const [bookingLoading, setBookingLoading] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [bookedRoute, setBookedRoute] = useState<any>(null);
+  const [mounted, setMounted] = useState(false);
 
   const searchParams = useSearchParams();
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
+    setMounted(true);
     const s = searchParams.get("source");
     const d = searchParams.get("destination");
     if (s && d && !searched) {
@@ -251,16 +254,16 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
         </div>
       )}
 
-      {/* Confirmation Modal */}
-      {showModal && bookedRoute && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#202124]/60 backdrop-blur-sm animate-in fade-in">
+      {/* Confirmation Modal via Portal */}
+      {showModal && bookedRoute && mounted && createPortal(
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[#202124]/60 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
             <div className="p-6 border-b border-[#DADCE0]">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-xl font-bold text-[#202124] font-['Syne'] flex items-center gap-2">
                   <CheckCircle2 className="w-6 h-6 text-[#188038]" /> Trip Confirmed!
                 </h3>
-                <button onClick={() => setShowModal(false)} className="text-[#5F6368] hover:text-[#202124] font-bold text-lg">
+                <button onClick={() => setShowModal(false)} className="text-[#5F6368] hover:text-[#202124] font-bold text-lg w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
                   ✕
                 </button>
               </div>
@@ -295,7 +298,8 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
