@@ -20,6 +20,8 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
   const [selectedDest, setSelectedDest] = useState("");
   const [bookingConfirmed, setBookingConfirmed] = useState<string | null>(null);
   const [bookingLoading, setBookingLoading] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [bookedRoute, setBookedRoute] = useState<any>(null);
 
   const searchParams = useSearchParams();
   const formRef = useRef<HTMLFormElement>(null);
@@ -95,6 +97,8 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
       setError(result.error);
     } else {
       setBookingConfirmed(r._id);
+      setBookedRoute(r);
+      setShowModal(true);
       setTimeout(() => setBookingConfirmed(null), 3000);
     }
   };
@@ -244,6 +248,53 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
               </div>
             ))
           )}
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      {showModal && bookedRoute && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#202124]/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl animate-in zoom-in-95 duration-300">
+            <div className="p-6 border-b border-[#DADCE0]">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold text-[#202124] font-['Syne'] flex items-center gap-2">
+                  <CheckCircle2 className="w-6 h-6 text-[#188038]" /> Trip Confirmed!
+                </h3>
+                <button onClick={() => setShowModal(false)} className="text-[#5F6368] hover:text-[#202124] font-bold text-lg">
+                  ✕
+                </button>
+              </div>
+              <p className="text-[#5F6368] text-sm leading-relaxed">Your trip has been saved to your history. Continue booking with your preferred provider:</p>
+            </div>
+            
+            <div className="p-6 bg-[#F8F9FA]">
+              {bookedRoute.transport_type === "Car (Uber X)" && (
+                <a href={`https://m.uber.com/ul/?action=setPickup&pickup=my_location`} target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-black text-white py-3 px-4 rounded-xl font-bold hover:bg-gray-800 transition-colors shadow-lg">
+                  Open Uber
+                </a>
+              )}
+              {bookedRoute.transport_type === "Bike" && (
+                <a href="https://pathao.com/bd/" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-[#E11A22] text-white py-3 px-4 rounded-xl font-bold hover:bg-[#C1161D] transition-colors shadow-lg">
+                  Open Pathao
+                </a>
+              )}
+              {bookedRoute.transport_type === "Metro Rail" && (
+                <a href="https://dmtcl.gov.bd/" target="_blank" rel="noopener noreferrer" className="w-full flex items-center justify-center gap-2 bg-[#188038] text-white py-3 px-4 rounded-xl font-bold hover:bg-[#13652C] transition-colors shadow-lg">
+                  Open DMTCL Web App
+                </a>
+              )}
+              {["CNG Auto", "Local Bus"].includes(bookedRoute.transport_type) && (
+                <div className="text-center py-4">
+                  <div className="w-16 h-16 bg-[#188038]/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <Navigation className="w-8 h-8 text-[#188038]" />
+                  </div>
+                  <p className="font-bold text-[#202124] text-lg mb-1">Ready to go!</p>
+                  <p className="text-sm text-[#5F6368] mb-6">Head to the nearest stand or stop to catch your {bookedRoute.transport_type}.</p>
+                  <button onClick={() => setShowModal(false)} className="w-full bg-[#1A73E8] text-white py-3 px-4 rounded-xl font-bold shadow-lg hover:bg-[#1557B0] transition-colors">Done</button>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       )}
     </>

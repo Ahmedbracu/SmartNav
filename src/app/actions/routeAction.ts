@@ -61,12 +61,13 @@ export async function findRoutes(sourceId: string, destId: string, budget: numbe
     if (m > trafficMultiplier) trafficMultiplier = m;
   });
 
-  // Dynamic Uber-style Options
+  // Dynamic Transport Options
   const baseOptions = [
     { type: "Bike", baseFare: 40, perKm: 12, timeMult: 0.8 },
     { type: "CNG Auto", baseFare: 50, perKm: 15, timeMult: 1.0 },
     { type: "Car (Uber X)", baseFare: 80, perKm: 25, timeMult: 1.2 },
     { type: "Local Bus", baseFare: 10, perKm: 2.5, timeMult: 1.6 },
+    { type: "Metro Rail", baseFare: 20, perKm: 5, timeMult: 0.5 }, // Faster and avoids traffic
   ];
 
   const generatedRoutes = baseOptions.map((opt, index) => {
