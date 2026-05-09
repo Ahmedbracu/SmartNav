@@ -59,28 +59,28 @@ export default async function TripHistoryPage() {
         <div className="glass-card flex items-center gap-4 hover:-translate-y-1 transition-transform">
           <div className="w-12 h-12 rounded-xl bg-[#188038]/10 text-[#188038] flex items-center justify-center"><Route className="w-6 h-6" /></div>
           <div>
-            <div className="text-2xl font-bold text-[#202124]">{stats.total}</div>
+            <div className="text-2xl font-bold text-[#202124]">{stats.total || 0}</div>
             <div className="text-xs text-[#5F6368] uppercase tracking-wider font-semibold">Total Trips</div>
           </div>
         </div>
         <div className="glass-card flex items-center gap-4 hover:-translate-y-1 transition-transform">
           <div className="w-12 h-12 rounded-xl bg-[#1A73E8]/10 text-[#1A73E8] flex items-center justify-center"><DollarSign className="w-6 h-6" /></div>
           <div>
-            <div className="text-2xl font-bold text-[#202124]">৳{Math.round(stats.totalCost).toLocaleString()}</div>
+            <div className="text-2xl font-bold text-[#202124]">৳{Math.round(stats.totalCost || 0).toLocaleString()}</div>
             <div className="text-xs text-[#5F6368] uppercase tracking-wider font-semibold">Total Spent</div>
           </div>
         </div>
         <div className="glass-card flex items-center gap-4 hover:-translate-y-1 transition-transform">
           <div className="w-12 h-12 rounded-xl bg-[#F4B400]/10 text-[#F4B400] flex items-center justify-center"><Clock className="w-6 h-6" /></div>
           <div>
-            <div className="text-2xl font-bold text-[#202124]">{Math.round(stats.avgTime)}<span className="text-sm text-[#5F6368]">m</span></div>
+            <div className="text-2xl font-bold text-[#202124]">{Math.round(stats.avgTime || 0)}<span className="text-sm text-[#5F6368]">m</span></div>
             <div className="text-xs text-[#5F6368] uppercase tracking-wider font-semibold">Avg Trip Time</div>
           </div>
         </div>
         <div className="glass-card flex items-center gap-4 hover:-translate-y-1 transition-transform">
           <div className="w-12 h-12 rounded-xl bg-[#D93025]/10 text-[#D93025] flex items-center justify-center"><TrendingUp className="w-6 h-6" /></div>
           <div>
-            <div className="text-2xl font-bold text-[#202124]">৳{Math.round(stats.avgCost)}</div>
+            <div className="text-2xl font-bold text-[#202124]">৳{Math.round(stats.avgCost || 0).toLocaleString()}</div>
             <div className="text-xs text-[#5F6368] uppercase tracking-wider font-semibold">Avg Trip Cost</div>
           </div>
         </div>
@@ -118,8 +118,12 @@ export default async function TripHistoryPage() {
                       {t.route?.destination_location?.name || "—"}
                     </td>
                     <td className="p-4 text-[#5F6368]">{t.travel_time} min</td>
-                    <td className="p-4"><span className="bg-[#1A73E8]/10 text-[#1A73E8] px-2 py-1 rounded font-bold">৳{t.travel_cost}</span></td>
-                    <td className="p-4 text-[#5F6368] text-xs">{new Date(t.trip_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
+                    <td className="p-4"><span className="bg-[#1A73E8]/10 text-[#1A73E8] px-2 py-1 rounded font-bold">৳{t.travel_cost || 0}</span></td>
+                    <td className="p-4 text-[#5F6368] text-xs">
+                      {t.trip_date && !isNaN(new Date(t.trip_date).getTime()) 
+                        ? new Date(t.trip_date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) 
+                        : "Unknown Date"}
+                    </td>
                   </tr>
                 ))
               )}
