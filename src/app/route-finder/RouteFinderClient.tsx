@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { findRoutes } from "@/app/actions/routeAction";
+import { createTrip } from "@/app/actions/tripAction";
 import { Search, MapPin, DollarSign, ArrowRight, AlertCircle, Clock, CheckCircle2, Navigation } from "lucide-react";
 
 const DhakaMap = dynamic(() => import("@/components/map/DhakaMap"), { ssr: false });
@@ -18,6 +19,7 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
   const [selectedSource, setSelectedSource] = useState("");
   const [selectedDest, setSelectedDest] = useState("");
   const [bookingConfirmed, setBookingConfirmed] = useState<string | null>(null);
+  const [bookingLoading, setBookingLoading] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
   const formRef = useRef<HTMLFormElement>(null);
@@ -83,6 +85,19 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
     }
     setLoading(false);
   }
+
+  const handleSelectRoute = async (r: any) => {
+    setBookingLoading(r._id);
+    setError("");
+    const result = await createTrip(selectedSource, selectedDest, r.min_seg_cost, r.adjusted_time);
+    setBookingLoading(null);
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setBookingConfirmed(r._id);
+      setTimeout(() => setBookingConfirmed(null), 3000);
+    }
+  };
 
   return (
     <>
@@ -212,13 +227,17 @@ export default function RouteFinderClient({ locations }: { locations: any[] }) {
                       ৳{r.min_seg_cost}
                     </span>
                     <button 
-                      onClick={() => {
-                        setBookingConfirmed(r._id);
-                        setTimeout(() => setBookingConfirmed(null), 3000);
-                      }}
-                      className="bg-[#1A73E8] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-[#1557B0] transition-colors shadow-sm flex items-center gap-2"
+                      onClick={() => handleSelectRoute(r)}
+                      disabled={bookingLoading === r._id}
+                      className="bg-[#1A73E8] text-white px-4 py-2 rounded-lg font-bold text-sm hover:bg-[#1557B0] transition-colors shadow-sm flex items-center gap-2 disabled:opacity-50"
                     >
-                      {bookingConfirmed === r._id ? <><CheckCircle2 className="w-4 h-4" /> Selected</> : "Select"}
+                      {bookingLoading === r._id ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      ) : bookingConfirmed === r._id ? (
+                        <><CheckCircle2 className="w-4 h-4" /> Selected</>
+                      ) : (
+                        "Select"
+                      )}
                     </button>
                   </div>
                 </div>
